@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+  <Name value="ExcuseMeDrone" />
+  <DisplayName value="Excuse Me, Drone" />
+  <Description value="One-shot combat dodge, stuck rescue, summon hotkey, and optional invisibility for the robotic drone." />
+  <Author value="Itachi &amp; Ai" />
+  <Version value="0.1.25" />
+  <Website value="" />
+  <SkipWithAntiCheat value="true" />
+</xml>
