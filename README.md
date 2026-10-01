@@ -43,5 +43,5 @@ Use a Unity `KeyCode` name such as `F8`, `Home`, or `G` (case-insensitive).
 Missing or invalid keys fall back to F10. `None` and undefined numeric values are rejected.
 
 Manual summon has no minimum distance, including for broken drones. Legacy
-`SummonDistance` / `MenuRescueDistance` settings are ignored. Stay/Sentry orders
-and modal UI guards still apply.
+`SummonDistance` / `MenuRescueDistance` settings are ignored. Stay/Sentry orders still apply. Manual summon also works while inventory or other
+modal UI windows are open.

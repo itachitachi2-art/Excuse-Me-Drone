@@ -129,9 +129,6 @@ namespace Itachi.ExcuseMeDrone
                 return;
             }
 
-            // Avoid accidental summons while another modal UI is in use.
-            if (LocalPlayerUI.AnyModalWindowOpen()) return;
-
             float distance = Vector3.Distance(drone.position, player.position);
             // Keep the user's explicit Stay/Sentry placement intact. F10 is only a
             // rescue/summon shortcut for a drone already ordered to Follow.
