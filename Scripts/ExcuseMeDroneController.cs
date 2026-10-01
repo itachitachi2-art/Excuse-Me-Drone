@@ -145,7 +145,7 @@ namespace Itachi.ExcuseMeDrone
                             (int)drone.OrderState != 1 || GameManager.Instance == null ||
                             GameManager.Instance.World == null ||
                             GameManager.Instance.World.GetEntity(drone.entityId) != drone) return;
-                        drone.setOrders((EntityDrone.Orders)0);
+                        drone.FollowMode();
                         SummonDrone(drone, player, ExcuseMeDroneConfig.Current);
                     }, delegate { }, false, true, true);
                 return;
