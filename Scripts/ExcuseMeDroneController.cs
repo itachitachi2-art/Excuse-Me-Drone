@@ -136,7 +136,7 @@ namespace Itachi.ExcuseMeDrone
             if ((int)drone.OrderState == 1)
             {
                 XUiC_MessageBoxWindowGroup.ShowOkCancel(ui.xui,
-                    "Excuse Me, Drone", "The drone is in Stay mode. Teleport it to you?", "",
+                    "Excuse Me, Drone", "The drone is in Stay mode. Switch to Follow and teleport it to you?", "",
                     delegate
                     {
                         // The world, owner or order may have changed while the
@@ -145,6 +145,7 @@ namespace Itachi.ExcuseMeDrone
                             (int)drone.OrderState != 1 || GameManager.Instance == null ||
                             GameManager.Instance.World == null ||
                             GameManager.Instance.World.GetEntity(drone.entityId) != drone) return;
+                        drone.setOrders((EntityDrone.Orders)0);
                         SummonDrone(drone, player, ExcuseMeDroneConfig.Current);
                     }, delegate { }, false, true, true);
                 return;
@@ -170,8 +171,6 @@ namespace Itachi.ExcuseMeDrone
                 ? ComputeBrokenSummonTarget(player, cfg)
                 : SnapTeleportTargetToGround(anchor, cfg);
             drone.TeleportToPosition(summonTarget);
-            if ((int)drone.OrderState == 1)
-                drone.SentryPos = summonTarget;
             ResetStuckSample(runtimeState);
 
             if (wasBroken)
@@ -298,8 +297,6 @@ namespace Itachi.ExcuseMeDrone
                 Vector3 desired = drone.position;
                 Vector3 groundTarget = SnapTeleportTargetToGround(desired, cfg);
                 drone.TeleportToPosition(groundTarget);
-                if ((int)drone.OrderState == 1)
-                    drone.SentryPos = groundTarget;
 
                 state.PendingBrokenGroundTeleportApplied = true;
                 state.PendingBrokenGroundY = groundTarget.y;

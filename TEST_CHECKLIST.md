@@ -31,11 +31,11 @@ Useful logs:
 
 ## Stay confirmation
 
-- Confirm the exact text: `The drone is in Stay mode. Teleport it to you?`.
-- OK: teleport to the player's current front target; Stay order remains and the drone does not return to its old waiting point.
+- Confirm the exact text: `The drone is in Stay mode. Switch to Follow and teleport it to you?`.
+- OK: switch to Follow before teleport; confirm it follows and does not return to its old Stay position or remain buried.
 - Cancel / close / outside click: no teleport and no waiting-position change.
 - Repeat F10 while confirmation is open: no duplicate/replaced dialog and no teleport.
 - Follow drone: summon immediately without a Stay confirmation.
 - Change order, remove drone, or leave the world before OK: no stale teleport.
-- Broken Stay drone: OK uses the existing revive/ground/lift/shutdown cycle and keeps the new Stay location.
+- Broken Stay drone: OK switches to Follow and uses the existing revive/ground/lift/shutdown cycle.
 - Repeat from inventory/menu, with nearby and distant drones, and with a custom cfg summon key.
