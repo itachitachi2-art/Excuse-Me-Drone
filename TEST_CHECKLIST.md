@@ -1,4 +1,4 @@
-# Excuse Me, Drone v0.1.26 test checklist
+# Excuse Me, Drone v1.0.0 test checklist
 
 ## Broken drone F10
 

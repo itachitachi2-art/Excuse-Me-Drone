@@ -1,4 +1,4 @@
-# Excuse Me, Drone v0.1.26 — 7 Days to Die v3.2 prototype
+# Excuse Me, Drone v1.0.0 — 7 Days to Die v3.2
 
 A small quality-of-life mod for the robotic drone.
 
@@ -12,7 +12,7 @@ A small quality-of-life mod for the robotic drone.
 - Follow-mode stuck rescue remains available.
 - Normal mod-triggered teleports use `World.GetHeightAt(x, z) + GroundClearance`.
 
-## Broken drone F10 experiment
+## Broken drone summon
 
 Broken/shutdown drones are not moved automatically by combat dodge or stuck rescue.
 
@@ -27,7 +27,7 @@ When F10 is used on a broken Follow-mode drone at any distance:
 7. The broken state is restored with Health **1** + `performShutdown()`.
 8. If the drone never re-lifts, the safety timeout is `BrokenReviveTimeoutSeconds` (default **6 s**) and shutdown is restored anyway.
 
-The purpose of v0.1.26 is to deliberately reproduce the redraw path observed in testing: **revive -> ground teleport -> Vanilla re-lift -> shutdown**.
+Broken drone summon uses the redraw path observed in testing: **revive -> ground teleport -> Vanilla re-lift -> shutdown**.
 
 Build with `build.cmd`.
 
