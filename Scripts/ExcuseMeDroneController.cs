@@ -129,15 +129,39 @@ namespace Itachi.ExcuseMeDrone
                 return;
             }
 
-            float distance = Vector3.Distance(drone.position, player.position);
-            // Keep the user's explicit Stay/Sentry placement intact. F10 is only a
-            // rescue/summon shortcut for a drone already ordered to Follow.
-            if (!IsFollowOrder(drone))
+            // Do not replace an existing confirmation or accept repeated hotkeys
+            // while the player is deciding. Other inventory/menu UI stays allowed.
+            if (ui.xui == null || XUiC_MessageBoxWindowGroup.IsShowing(ui.xui)) return;
+
+            if ((int)drone.OrderState == 1)
             {
-                DebugLog("Summon denied: drone is " + distance.ToString("F1") + "m away and is not in Follow mode.");
+                XUiC_MessageBoxWindowGroup.ShowOkCancel(ui.xui,
+                    "Excuse Me, Drone", "ステイ中ですがテレポートさせますか？", "",
+                    delegate
+                    {
+                        // The world, owner or order may have changed while the
+                        // confirmation was open. Never act on a stale drone.
+                        if (ui.entityPlayer != player || localDrone != drone || drone.Owner != player ||
+                            (int)drone.OrderState != 1 || GameManager.Instance == null ||
+                            GameManager.Instance.World == null ||
+                            GameManager.Instance.World.GetEntity(drone.entityId) != drone) return;
+                        SummonDrone(drone, player, ExcuseMeDroneConfig.Current);
+                    }, delegate { }, false, true, true);
                 return;
             }
 
+            if (!IsFollowOrder(drone))
+            {
+                DebugLog("Summon denied: unsupported drone order.");
+                return;
+            }
+
+            SummonDrone(drone, player, cfg);
+        }
+
+        private static void SummonDrone(EntityDrone drone, EntityPlayerLocal player, ExcuseMeDroneConfig cfg)
+        {
+            float distance = Vector3.Distance(drone.position, player.position);
             RuntimeState runtimeState = GetState(drone);
             bool wasBroken = IsShutdownOrBroken(drone);
 
@@ -146,6 +170,9 @@ namespace Itachi.ExcuseMeDrone
                 ? ComputeBrokenSummonTarget(player, cfg)
                 : SnapTeleportTargetToGround(anchor, cfg);
             drone.TeleportToPosition(summonTarget);
+            if ((int)drone.OrderState == 1)
+                drone.SentryPos = summonTarget;
+            ResetStuckSample(runtimeState);
 
             if (wasBroken)
             {
@@ -160,7 +187,7 @@ namespace Itachi.ExcuseMeDrone
             }
             else
             {
-                DebugLog("Summon: teleported Follow-mode drone from " + distance.ToString("F1") +
+                DebugLog("Summon: teleported drone from " + distance.ToString("F1") +
                     "m to player-front ground target y=" + summonTarget.y.ToString("F2") + ".");
             }
         }
@@ -271,6 +298,8 @@ namespace Itachi.ExcuseMeDrone
                 Vector3 desired = drone.position;
                 Vector3 groundTarget = SnapTeleportTargetToGround(desired, cfg);
                 drone.TeleportToPosition(groundTarget);
+                if ((int)drone.OrderState == 1)
+                    drone.SentryPos = groundTarget;
 
                 state.PendingBrokenGroundTeleportApplied = true;
                 state.PendingBrokenGroundY = groundTarget.y;

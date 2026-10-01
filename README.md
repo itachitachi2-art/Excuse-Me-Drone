@@ -6,7 +6,7 @@ A small quality-of-life mod for the robotic drone.
 
 - **F10 is summon-only.** It does not open any drone menu or camera interaction.
 - A healthy Follow-mode drone at any distance is summoned and returned immediately to Vanilla AI.
-- A Stay-mode drone is not summoned.
+- A Stay-mode drone shows an OK/Cancel confirmation before manual summon. OK teleports it and updates its Stay position without switching to Follow; Cancel leaves it in place.
 - When a zombie first enters 5 m, the drone is moved aside once. Vanilla follow/attack/stun-gun behavior resumes immediately.
 - Combat dodge has a 60-second re-trigger cooldown.
 - Follow-mode stuck rescue remains available.
@@ -43,5 +43,17 @@ Use a Unity `KeyCode` name such as `F8`, `Home`, or `G` (case-insensitive).
 Missing or invalid keys fall back to F10. `None` and undefined numeric values are rejected.
 
 Manual summon has no minimum distance, including for broken drones. Legacy
-`SummonDistance` / `MenuRescueDistance` settings are ignored. Stay/Sentry orders still apply. Manual summon also works while inventory or other
-modal UI windows are open.
+`SummonDistance` / `MenuRescueDistance` settings are ignored. Stay mode requires confirmation. Manual summon also works while inventory or other
+modal UI windows are open. An already open message box is not replaced.
+
+## Stay confirmation
+
+Press the configured summon key (default F10) while the drone is in Stay mode:
+
+> ステイ中ですがテレポートさせますか？
+
+The standard game OK/Cancel message box is used. OK summons the drone to the
+player's current position and facing target and updates its waiting position while
+retaining Stay. Cancel (including dismissal) performs no teleport. Repeated summon
+keys do not replace an open message box. If the drone disappears, changes owner or
+leaves Stay while the box is open, OK does not move it.
