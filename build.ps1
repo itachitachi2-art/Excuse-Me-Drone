@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$GameDir = "",
     [string]$Configuration = "Release"
 )
@@ -127,14 +127,18 @@ foreach ($optional in @(
     if (Test-Path $p) { $referencePaths += $p }
 }
 
-$gameHarmony = Join-Path $managed '0Harmony.dll'
-$localHarmony = Join-Path (Join-Path $here 'References') '0Harmony.dll'
-if (Test-Path $gameHarmony) {
-    $referencePaths += $gameHarmony
-} elseif (Test-Path $localHarmony) {
-    $referencePaths += $localHarmony
+$harmonyCandidates = @(
+    (Join-Path $managed '0Harmony.dll'),
+    (Join-Path $resolvedGameDir 'Mods\0_TFP_Harmony\0Harmony.dll'),
+    (Join-Path $resolvedGameDir 'Mods\TFP_Harmony\0Harmony.dll'),
+    (Join-Path (Join-Path $here 'References') '0Harmony.dll')
+)
+$resolvedHarmony = $harmonyCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+if ($resolvedHarmony) {
+    $referencePaths += $resolvedHarmony
+    Write-Host "[ExcuseMeDrone] Harmony: $resolvedHarmony"
 } else {
-    throw "0Harmony.dll was not found in the game Managed folder or local References folder."
+    throw "0Harmony.dll was not found in Managed, Mods\0_TFP_Harmony, Mods\TFP_Harmony, or local References."
 }
 
 $cscCandidates = @(
