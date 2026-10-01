@@ -31,7 +31,7 @@ Useful logs:
 
 ## Stay confirmation
 
-- Confirm the exact text: `ステイ中ですがテレポートさせますか？`.
+- Confirm the exact text: `The drone is in Stay mode. Teleport it to you?`.
 - OK: teleport to the player's current front target; Stay order remains and the drone does not return to its old waiting point.
 - Cancel / close / outside click: no teleport and no waiting-position change.
 - Repeat F10 while confirmation is open: no duplicate/replaced dialog and no teleport.

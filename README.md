@@ -50,7 +50,7 @@ modal UI windows are open. An already open message box is not replaced.
 
 Press the configured summon key (default F10) while the drone is in Stay mode:
 
-> ステイ中ですがテレポートさせますか？
+> The drone is in Stay mode. Teleport it to you?
 
 The standard game OK/Cancel message box is used. OK summons the drone to the
 player's current position and facing target and updates its waiting position while

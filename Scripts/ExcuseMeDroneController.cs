@@ -136,7 +136,7 @@ namespace Itachi.ExcuseMeDrone
             if ((int)drone.OrderState == 1)
             {
                 XUiC_MessageBoxWindowGroup.ShowOkCancel(ui.xui,
-                    "Excuse Me, Drone", "ステイ中ですがテレポートさせますか？", "",
+                    "Excuse Me, Drone", "The drone is in Stay mode. Teleport it to you?", "",
                     delegate
                     {
                         // The world, owner or order may have changed while the
