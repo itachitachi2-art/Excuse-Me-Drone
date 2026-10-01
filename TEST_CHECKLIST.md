@@ -23,9 +23,8 @@ Useful logs:
 - Healthy Follow drone: summon within 3 m, at 5 m, and beyond 5 m.
 - Stay/Sentry drone: key must not teleport it at any distance.
 - Modal UI open: key must not summon the drone.
-- Set ini `SummonKey=F8`, restart: F8 summons, F10 does not.
+- Set cfg `SummonKey=F8`, restart: F8 summons, F10 does not.
 - Confirm lowercase `f8` also works.
 - Invalid name, `None`, or undefined numeric key: fallback to F10.
-- Remove ini: legacy cfg `SummonKey` (or `MenuKey`) still works.
-- Both files present: ini takes precedence over cfg.
+- Legacy cfg `MenuKey` still works when `SummonKey` is absent.
 - Old cfg with `SummonDistance=5.0`: nearby manual summon still works.

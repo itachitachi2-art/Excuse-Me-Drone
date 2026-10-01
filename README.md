@@ -33,18 +33,14 @@ Build with `build.cmd`.
 
 ## Summon key configuration
 
-Edit `Config/ExcuseMeDrone.ini`, then restart the game:
+Edit `Config/ExcuseMeDrone.cfg`, then restart the game:
 
 ```ini
-[Summon]
 SummonKey=F10
 ```
 
 Use a Unity `KeyCode` name such as `F8`, `Home`, or `G` (case-insensitive).
 Missing or invalid keys fall back to F10. `None` and undefined numeric values are rejected.
-The ini file takes precedence over the legacy `Config/ExcuseMeDrone.cfg`; if no ini
-exists, the cfg is loaded instead. To retain customized cfg settings when upgrading,
-copy them into the ini, or remove the bundled ini to continue using the cfg.
 
 Manual summon has no minimum distance, including for broken drones. Legacy
 `SummonDistance` / `MenuRescueDistance` settings are ignored. Stay/Sentry orders

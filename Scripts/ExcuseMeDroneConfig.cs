@@ -45,9 +45,7 @@ namespace Itachi.ExcuseMeDrone
         internal static void Load(string modPath)
         {
             var config = new ExcuseMeDroneConfig();
-            string path = Path.Combine(modPath, "Config", "ExcuseMeDrone.ini");
-            if (!File.Exists(path))
-                path = Path.Combine(modPath, "Config", "ExcuseMeDrone.cfg");
+            string path = Path.Combine(modPath, "Config", "ExcuseMeDrone.cfg");
 
             try
             {
@@ -62,7 +60,7 @@ namespace Itachi.ExcuseMeDrone
                 foreach (string rawLine in File.ReadAllLines(path))
                 {
                     string line = rawLine.Trim();
-                    if (line.Length == 0 || line.StartsWith("#") || line.StartsWith(";") || line.StartsWith("[")) continue;
+                    if (line.Length == 0 || line.StartsWith("#")) continue;
                     int equals = line.IndexOf('=');
                     if (equals <= 0) continue;
                     values[line.Substring(0, equals).Trim()] = line.Substring(equals + 1).Trim();
