@@ -133,12 +133,6 @@ namespace Itachi.ExcuseMeDrone
             if (LocalPlayerUI.AnyModalWindowOpen()) return;
 
             float distance = Vector3.Distance(drone.position, player.position);
-            if (distance <= cfg.SummonDistance)
-            {
-                DebugLog("Summon key ignored: drone is already nearby at " + distance.ToString("F1") + "m.");
-                return;
-            }
-
             // Keep the user's explicit Stay/Sentry placement intact. F10 is only a
             // rescue/summon shortcut for a drone already ordered to Follow.
             if (!IsFollowOrder(drone))

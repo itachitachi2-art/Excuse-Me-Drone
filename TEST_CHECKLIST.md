@@ -1,9 +1,9 @@
-# Excuse Me, Drone v0.1.25 test checklist
+# Excuse Me, Drone v0.1.26 test checklist
 
 ## Broken drone F10
 
 1. Break the drone with `kill <entityId>`.
-2. Move more than the F10 minimum summon distance away.
+2. Test both within 3 m (including directly beside the player) and farther than 5 m.
 3. Press F10.
 4. Confirm the drone appears at the player-relative safe position.
 5. Confirm the temporary wake/revive occurs.
@@ -17,3 +17,15 @@ Useful logs:
 - `Broken drone ground redraw cycle started.`
 - `Broken drone re-lifted; shutdown restored.`
 - `Broken-drone re-lift timed out; shutdown restored.`
+
+## Manual summon and configuration
+
+- Healthy Follow drone: summon within 3 m, at 5 m, and beyond 5 m.
+- Stay/Sentry drone: key must not teleport it at any distance.
+- Modal UI open: key must not summon the drone.
+- Set ini `SummonKey=F8`, restart: F8 summons, F10 does not.
+- Confirm lowercase `f8` also works.
+- Invalid name, `None`, or undefined numeric key: fallback to F10.
+- Remove ini: legacy cfg `SummonKey` (or `MenuKey`) still works.
+- Both files present: ini takes precedence over cfg.
+- Old cfg with `SummonDistance=5.0`: nearby manual summon still works.
