@@ -1,4 +1,4 @@
-# Excuse Me, Drone v1.0.0 test checklist
+# Excuse Me, Drone v1.0.3 test checklist
 
 ## Broken drone F10
 
@@ -39,3 +39,27 @@ Useful logs:
 - Change order, remove drone, or leave the world before OK: no stale teleport.
 - Broken Stay drone: OK switches to Follow and uses the existing revive/ground/lift/shutdown cycle.
 - Repeat from inventory/menu, with nearby and distant drones, and with a custom cfg summon key.
+
+
+## v1.0.3 current-floor placement (in-game checks pending)
+
+- Recall healthy drones from the ground floor, middle floor, roof and underground; confirm the target stays on the player's current level.
+- Face a wall and press recall: confirm another nearby candidate is used.
+- Test low ceilings, doors, narrow corridors, slopes, stairs and partial blocks.
+- Over open air, manual recall must still work. With ground snap enabled its fallback uses the player-foot baseline; with ground snap disabled it uses player-relative airborne height.
+- Test `GroundSnapEnabled=false` and custom summon offsets.
+- Test away from world origin, after a floating-origin reposition.
+- Trigger combat dodge indoors and confirm it stays on the current floor.
+- Leave a Follow drone stationary at least 3 m above/below the player but within 8 m; confirm rescue after `StuckSeconds`.
+- When all candidates are blocked, automatic movement must leave the drone in place and avoid repeated failure logs.
+- Broken drone: repeat recall and redraw checks indoors on several floors; confirm no global-height relocation and that shutdown is restored.
+- Unloaded Follow and Stay drones: confirm v1.0.1 recall still works; cancel must preserve saved position.
+- Test single-player and local host. Remote-client unloaded recall remains server-only.
+- Observe the final manual center fallback in confined spaces; check clipping and subsequent Vanilla separation.
+
+## Ground redraw regression
+
+- Healthy recall must show the ground-placement then Vanilla-lift redraw path.
+- Broken recall must preserve wake -> ground teleport -> Vanilla lift -> restored shutdown.
+- Test blocked/failed floor search: ground teleport must still execute before its applied flag is set.
+- Keep GroundSnapEnabled=true when validating this ground redraw path.

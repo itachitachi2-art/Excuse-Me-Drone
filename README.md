@@ -1,59 +1,40 @@
-# Excuse Me, Drone v1.0.0 — 7 Days to Die v3.2
+# Excuse Me, Drone v1.0.3 candidate — 7 Days to Die v3.2
 
 A small quality-of-life mod for the robotic drone.
 
-## Current behavior
+## Recall and automatic movement
 
-- **F10 is summon-only.** It does not open any drone menu or camera interaction.
-- A healthy Follow-mode drone at any distance is summoned and returned immediately to Vanilla AI.
-- A Stay-mode drone shows an OK/Cancel confirmation before manual summon. OK switches it to Follow and uses the existing summon path; Cancel leaves it in Stay.
-- When a zombie first enters 5 m, the drone is moved aside once. Vanilla follow/attack/stun-gun behavior resumes immediately.
-- Combat dodge has a 60-second re-trigger cooldown.
-- Follow-mode stuck rescue remains available.
-- Normal mod-triggered teleports use `World.GetHeightAt(x, z) + GroundClearance`.
+- The configurable summon key (default F10) recalls Follow-mode drones at any distance, including with inventory open.
+- Stay-mode recall asks for confirmation, then switches to Follow.
+- v1.0.1 unloaded-drone recall is retained for single-player and the local host.
+- Combat dodge moves the drone aside once when a zombie enters 5 m; cooldown is 60 seconds.
+- Stuck rescue handles distant stationary drones and stationary drones at least 3 m above/below the player.
 
-## Broken drone summon
+## Current-floor placement fix
 
-Broken/shutdown drones are not moved automatically by combat dodge or stuck rescue.
+Mod teleports no longer use `World.GetHeightAt(x, z)`. Ground placement casts down only from 0.75 m above the player's feet to 0.75 m below them, checks for a movement-blocking world block under the hit, and checks nearby clearance. Candidate positions start at the requested offset, then circle the player at 1.5, 1.0 and 0.6 m. Unity physics coordinates account for `Origin.position`.
 
-When F10 is used on a broken Follow-mode drone at any distance:
+The clearance check uses a conservative 0.9 × 0.8 × 0.9 m box above the placement pivot. Own-drone colliders are ignored. Owner overlap is allowed only at the final center candidate. A full overlap buffer is treated as blocked.
 
-1. The broken drone is moved to a player-relative safe position.
-2. After the nearby entity resumes updating, Health is temporarily set to **2**.
-3. Vanilla `setShutdown(false)` and `playWakeupAnim()` are called.
-4. After one complete Vanilla update, the now-live drone is teleported once to the detected ground height.
-5. Vanilla drone AI is allowed to lift the drone from the ground under its own movement.
-6. A lift of `BrokenLiftThreshold` (default **0.25 m**) is required, and the drone remains alive for at least `BrokenMinimumAwakeSeconds` (default **1.50 s**) after the ground teleport.
-7. The broken state is restored with Health **1** + `performShutdown()`.
-8. If the drone never re-lifts, the safety timeout is `BrokenReviveTimeoutSeconds` (default **6 s**) and shutdown is restored anyway.
+Automatic movement is skipped if no clear candidate exists. Healthy manual recall with ground snap enabled always runs the ground-placement redraw step. If the local search fails, it uses the player's foot position plus `GroundClearance`. Broken initial recall and ground-snap-disabled recall use player-relative airspace. Center fallbacks may overlap the owner or geometry in extremely confined spaces and require in-game checks.
 
-Broken drone summon uses the redraw path observed in testing: **revive -> ground teleport -> Vanilla re-lift -> shutdown**.
+`GroundSnapEnabled=false` preserves player-relative height while still checking clearance. Broken-drone initial recall remains airborne. Its revive/ground/lift/shutdown redraw cycle now uses the local placement search; if no clear ground candidate exists, it teleports to the player-foot fallback before marking the step applied. The wake/ground/lift/shutdown sequence is preserved.
 
-Build with `build.cmd`.
+## Build
 
-## Summon key configuration
+Run `build.cmd` or `package.cmd` on Windows, optionally supplying the game installation directory. The scripts use Windows' C# compiler and the game's runtime references. Harmony is resolved from the game or local `References`; game/Harmony assemblies are not included in this repository.
 
-Edit `Config/ExcuseMeDrone.cfg`, then restart the game:
+## Validation
 
-```ini
-SummonKey=F10
+- Changed Controller/Config compiled against the available actual 7DTD/Unity assemblies.
+- 25 extracted-production-method placement/rescue/redraw cases passed with deterministic physics/world doubles.
+- 15 extracted-method summon-flow regression cases passed, including unloaded Stay recall and cancellation.
+- Full Harmony build, Unity physics behavior and in-game rendering remain to be validated on the user's installation.
+
+Run the placement cases with .NET 8 and Roslyn:
+
+```text
+python tests/run-placement-tests.py /path/to/dotnet /path/to/csc.dll
 ```
 
-Use a Unity `KeyCode` name such as `F8`, `Home`, or `G` (case-insensitive).
-Missing or invalid keys fall back to F10. `None` and undefined numeric values are rejected.
-
-Manual summon has no minimum distance, including for broken drones. Legacy
-`SummonDistance` / `MenuRescueDistance` settings are ignored. Stay mode requires confirmation. Manual summon also works while inventory or other
-modal UI windows are open. An already open message box is not replaced.
-
-## Stay confirmation
-
-Press the configured summon key (default F10) while the drone is in Stay mode:
-
-> The drone is in Stay mode. Switch to Follow and teleport it to you?
-
-The standard game OK/Cancel message box is used. OK summons the drone to the
-player's current position and facing target after switching it to Follow.
-Stay is not restored. Cancel (including dismissal) performs no teleport. Repeated summon
-keys do not replace an open message box. If the drone disappears, changes owner or
-leaves Stay while the box is open, OK does not move it.
+See `TEST_CHECKLIST.md` for game checks. This branch is a candidate, not a published Nexus release.

@@ -1,0 +1,10 @@
+Excuse Me, Drone 1.0.3 candidate
+
+Replace global height-map teleport placement with nearby floor and clearance checks.
+Apply to manual summon, combat dodge, stuck rescue, and broken-drone redraw.
+Rescue stationary drones on nearby floors with at least 3 m vertical separation.
+Retain v1.0.1 unloaded-drone recall and Stay confirmation.
+In-game validation pending.
+
+Restore ground-placement redraw when local floor/clearance search fails.
+Never mark the broken-drone ground step complete without executing its teleport.
