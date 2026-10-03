@@ -15,6 +15,8 @@ namespace Itachi.ExcuseMeDrone
             internal float LastSampleTime;
             internal float StuckAccumulated;
             internal bool HasSample;
+            internal bool PlacementBlockedLogged;
+            internal float NextRescueAttemptTime;
             internal bool PendingBrokenRevive;
             internal bool PendingBrokenReshutdown;
             internal float PendingBrokenStartY;
@@ -26,6 +28,7 @@ namespace Itachi.ExcuseMeDrone
         }
 
         private static readonly Dictionary<int, RuntimeState> States = new Dictionary<int, RuntimeState>();
+        private static readonly Collider[] PlacementOverlaps = new Collider[32];
         private static EntityDrone localDrone;
         private static int lastSummonFrame = -1;
         private static bool loggedFirstLocalDroneTick;
@@ -122,39 +125,140 @@ namespace Itachi.ExcuseMeDrone
             lastSummonFrame = Time.frameCount;
 
             EntityPlayerLocal player = ui.entityPlayer;
+            if (GameManager.Instance == null || GameManager.Instance.World == null) return;
+            World world = GameManager.Instance.World;
             EntityDrone drone = localDrone;
-            if (drone == null || drone.Owner != player)
+            if (drone == null || drone.Owner != player || world.GetEntity(drone.entityId) != drone)
             {
-                DebugLog("Summon key pressed, but no local owned drone is currently registered.");
+                drone = null;
+                if (DroneManager.Instance != null)
+                {
+                    foreach (EntityCreationData saved in DroneManager.Instance.GetAllDronesECD())
+                    {
+                        if (saved.belongsPlayerId != player.entityId) continue;
+                        EntityDrone active = world.GetEntity(saved.id) as EntityDrone;
+                        if (active != null && active.Owner == player)
+                        {
+                            drone = active;
+                            localDrone = active;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (drone == null)
+            {
+                HandleUnloadedSummon(ui, player, world, cfg);
                 return;
             }
 
-            // Avoid accidental summons while another modal UI is in use.
-            if (LocalPlayerUI.AnyModalWindowOpen()) return;
+            // Do not replace an existing confirmation or accept repeated hotkeys
+            // while the player is deciding. Other inventory/menu UI stays allowed.
+            if (ui.xui == null || XUiC_MessageBoxWindowGroup.IsShowing(ui.xui)) return;
 
-            float distance = Vector3.Distance(drone.position, player.position);
-            if (distance <= cfg.SummonDistance)
+            if ((int)drone.OrderState == 1)
             {
-                DebugLog("Summon key ignored: drone is already nearby at " + distance.ToString("F1") + "m.");
+                XUiC_MessageBoxWindowGroup.ShowOkCancel(ui.xui,
+                    "Excuse Me, Drone", "The drone is in Stay mode. Switch to Follow and teleport it to you?", "",
+                    delegate
+                    {
+                        // The world, owner or order may have changed while the
+                        // confirmation was open. Never act on a stale drone.
+                        if (ui.entityPlayer != player || localDrone != drone || drone.Owner != player ||
+                            (int)drone.OrderState != 1 || GameManager.Instance == null ||
+                            GameManager.Instance.World == null ||
+                            GameManager.Instance.World.GetEntity(drone.entityId) != drone) return;
+                        drone.FollowMode();
+                        SummonDrone(drone, player, ExcuseMeDroneConfig.Current);
+                    }, delegate { }, false, true, true);
                 return;
             }
 
-            // Keep the user's explicit Stay/Sentry placement intact. F10 is only a
-            // rescue/summon shortcut for a drone already ordered to Follow.
             if (!IsFollowOrder(drone))
             {
-                DebugLog("Summon denied: drone is " + distance.ToString("F1") + "m away and is not in Follow mode.");
+                DebugLog("Summon denied: unsupported drone order.");
                 return;
             }
 
+            SummonDrone(drone, player, cfg);
+        }
+
+        private static void HandleUnloadedSummon(LocalPlayerUI ui, EntityPlayerLocal player,
+            World world, ExcuseMeDroneConfig cfg)
+        {
+            if (ui.xui == null || XUiC_MessageBoxWindowGroup.IsShowing(ui.xui)) return;
+            // Only the server owns the saved drone records and may spawn entities.
+            if (!ConnectionManager.Instance.IsServer || DroneManager.Instance == null)
+            {
+                DebugLog("No loaded owned drone; unloaded recall requires the server.");
+                return;
+            }
+            EntityCreationData candidate = null;
+            foreach (EntityCreationData saved in DroneManager.Instance.GetAllDronesECD())
+            {
+                if (saved.belongsPlayerId == player.entityId && world.GetEntity(saved.id) == null)
+                {
+                    candidate = saved;
+                    break;
+                }
+            }
+            if (candidate == null)
+            {
+                DebugLog("Summon key pressed, but no owned drone is registered or saved.");
+                return;
+            }
+            EntityCreationData selected = candidate;
+            if ((int)selected.orderState == 1)
+            {
+                XUiC_MessageBoxWindowGroup.ShowOkCancel(ui.xui,
+                    "Excuse Me, Drone", "The drone is in Stay mode. Switch to Follow and teleport it to you?", "",
+                    delegate
+                    {
+                        if (ui.entityPlayer != player || GameManager.Instance == null ||
+                            GameManager.Instance.World != world || (int)selected.orderState != 1) return;
+                        RecallUnloadedDrone(selected, player, world, ExcuseMeDroneConfig.Current);
+                    }, delegate { }, false, true, true);
+                return;
+            }
+            if ((int)selected.orderState == 0)
+                RecallUnloadedDrone(selected, player, world, cfg);
+        }
+
+        private static void RecallUnloadedDrone(EntityCreationData selected, EntityPlayerLocal player,
+            World world, ExcuseMeDroneConfig cfg)
+        {
+            if (!ConnectionManager.Instance.IsServer || selected.belongsPlayerId != player.entityId ||
+                world.GetEntity(selected.id) != null || DroneManager.Instance == null) return;
+            // Revalidate the actual saved record; cancellation never alters it.
+            bool registered = false;
+            foreach (EntityCreationData saved in DroneManager.Instance.GetAllDronesECD())
+                if (object.ReferenceEquals(saved, selected)) { registered = true; break; }
+            if (!registered) return;
+            Vector3 previousPosition = selected.pos;
+            selected.pos = FindManualSummonTarget(player, null, cfg, true);
+            EntityDrone restored = DroneManager.Instance.LoadDrone(selected.id, world);
+            if (restored == null)
+            {
+                selected.pos = previousPosition;
+                DebugLog("Saved drone could not be loaded for recall.");
+                return;
+            }
+            localDrone = restored;
+            restored.FollowMode();
+            SummonDrone(restored, player, cfg);
+            // DroneManager.Update removes the now-loaded record from its unloaded list.
+            DebugLog("Recalled saved drone " + restored.entityId + " near its owner.");
+        }
+
+        private static void SummonDrone(EntityDrone drone, EntityPlayerLocal player, ExcuseMeDroneConfig cfg)
+        {
+            float distance = Vector3.Distance(drone.position, player.position);
             RuntimeState runtimeState = GetState(drone);
             bool wasBroken = IsShutdownOrBroken(drone);
 
-            Vector3 anchor = ComputeSummonAnchor(player, cfg);
-            Vector3 summonTarget = wasBroken
-                ? ComputeBrokenSummonTarget(player, cfg)
-                : SnapTeleportTargetToGround(anchor, cfg);
+            Vector3 summonTarget = FindManualSummonTarget(player, drone, cfg, wasBroken);
             drone.TeleportToPosition(summonTarget);
+            ResetStuckSample(runtimeState);
 
             if (wasBroken)
             {
@@ -169,7 +273,7 @@ namespace Itachi.ExcuseMeDrone
             }
             else
             {
-                DebugLog("Summon: teleported Follow-mode drone from " + distance.ToString("F1") +
+                DebugLog("Summon: teleported drone from " + distance.ToString("F1") +
                     "m to player-front ground target y=" + summonTarget.y.ToString("F2") + ".");
             }
         }
@@ -277,8 +381,10 @@ namespace Itachi.ExcuseMeDrone
 
             if (!state.PendingBrokenGroundTeleportApplied)
             {
-                Vector3 desired = drone.position;
-                Vector3 groundTarget = SnapTeleportTargetToGround(desired, cfg);
+                EntityPlayerLocal owner = drone.Owner as EntityPlayerLocal;
+                if (owner == null) return;
+                Vector3 groundTarget = FindGroundRedrawTarget(owner, drone.position, drone, cfg);
+                // Set the applied flag only after the redraw teleport actually runs.
                 drone.TeleportToPosition(groundTarget);
 
                 state.PendingBrokenGroundTeleportApplied = true;
@@ -379,7 +485,16 @@ namespace Itachi.ExcuseMeDrone
             if (!TryFindNearestZombie(owner, state, cfg.CombatTriggerDistance, out enemy, out distance))
                 return;
 
-            Vector3 target = SnapTeleportTargetToGround(ComputeDodgeAnchor(owner, cfg), cfg);
+            Vector3 target;
+            if (!TryFindTeleportTarget(owner, ComputeDodgeAnchor(owner, cfg), drone, cfg,
+                cfg.GroundSnapEnabled, out target))
+            {
+                if (!state.PlacementBlockedLogged)
+                    DebugLog("Automatic teleport skipped: no clear position on the owner's current floor.");
+                state.PlacementBlockedLogged = true;
+                return;
+            }
+            state.PlacementBlockedLogged = false;
             drone.TeleportToPosition(target);
             state.NextCombatDodgeTime = now + cfg.CombatDodgeCooldownSeconds;
             ResetStuckSample(state);
@@ -435,6 +550,7 @@ namespace Itachi.ExcuseMeDrone
 
         private static void UpdateStuckRescue(EntityDrone drone, EntityPlayerLocal owner, RuntimeState state, ExcuseMeDroneConfig cfg)
         {
+            if (Time.time < state.NextRescueAttemptTime) return;
             float ownerDistance = Vector3.Distance(drone.position, owner.position);
             if (ownerDistance >= cfg.ImmediateRescueDistance)
             {
@@ -456,7 +572,8 @@ namespace Itachi.ExcuseMeDrone
             if (elapsed < 1.0f) return;
 
             float moved = Vector3.Distance(drone.position, state.LastSamplePosition);
-            if (ownerDistance >= cfg.StuckDistance && moved <= cfg.StuckMovementThreshold)
+            bool separatedVertically = Mathf.Abs(drone.position.y - owner.position.y) >= 3.0f;
+            if ((ownerDistance >= cfg.StuckDistance || separatedVertically) && moved <= cfg.StuckMovementThreshold)
                 state.StuckAccumulated += elapsed;
             else
                 state.StuckAccumulated = 0f;
@@ -470,7 +587,17 @@ namespace Itachi.ExcuseMeDrone
 
         private static void Rescue(EntityDrone drone, EntityPlayerLocal owner, RuntimeState state, ExcuseMeDroneConfig cfg, string reason)
         {
-            Vector3 target = SnapTeleportTargetToGround(ComputeDodgeAnchor(owner, cfg), cfg);
+            state.NextRescueAttemptTime = Time.time + 1.0f;
+            Vector3 target;
+            if (!TryFindTeleportTarget(owner, ComputeDodgeAnchor(owner, cfg), drone, cfg,
+                cfg.GroundSnapEnabled, out target))
+            {
+                if (!state.PlacementBlockedLogged)
+                    DebugLog("Automatic teleport skipped: no clear position on the owner's current floor.");
+                state.PlacementBlockedLogged = true;
+                return;
+            }
+            state.PlacementBlockedLogged = false;
             drone.TeleportToPosition(target);
             ResetStuckSample(state);
             DebugLog("Drone " + drone.entityId + " rescue (" + reason + ").");
@@ -491,30 +618,130 @@ namespace Itachi.ExcuseMeDrone
         }
 
 
-        private static Vector3 SnapTeleportTargetToGround(Vector3 desired, ExcuseMeDroneConfig cfg)
+        private static Vector3 FindManualSummonTarget(EntityPlayerLocal owner, EntityDrone drone,
+            ExcuseMeDroneConfig cfg, bool broken)
         {
-            if (!cfg.GroundSnapEnabled)
-                return desired;
+            Vector3 desired = broken ? ComputeBrokenSummonTarget(owner, cfg) : ComputeSummonAnchor(owner, cfg);
+            if (!broken && cfg.GroundSnapEnabled)
+                return FindGroundRedrawTarget(owner, desired, drone, cfg);
+            Vector3 target;
+            if (TryFindTeleportTarget(owner, desired, drone, cfg, false, out target))
+                return target;
 
+
+            // The player's occupied space is the final fallback, rather than the same
+            // blocked forward offset or a terrain/roof height. Vanilla separates the drone.
+            DebugLog("Manual recall: no clear nearby candidate; using player-relative fallback.");
+            return owner.position + Vector3.up * cfg.BrokenSummonHeightOffset;
+        }
+
+        private static Vector3 FindGroundRedrawTarget(EntityPlayerLocal owner, Vector3 desired,
+            EntityDrone drone, ExcuseMeDroneConfig cfg)
+        {
+            if (!cfg.GroundSnapEnabled) return desired;
+            Vector3 target;
+            if (TryFindTeleportTarget(owner, desired, drone, cfg, true, out target))
+                return target;
+
+            // Preserve the ground -> Vanilla lift redraw path even when the physics
+            // search rejects all candidates. The owner's foot position supplies the
+            // current-floor baseline; do not substitute airborne placement or a
+            // global height map, and do not mark the ground teleport as applied early.
+            DebugLog("Ground redraw: local floor search failed; using owner-foot fallback.");
+            return owner.position + Vector3.up * cfg.GroundClearance;
+        }
+
+        private static bool TryFindTeleportTarget(EntityPlayerLocal owner, Vector3 desired, EntityDrone drone,
+            ExcuseMeDroneConfig cfg, bool ground, out Vector3 target)
+        {
+            if (TryPlacement(owner, desired, drone, cfg, ground, false, out target))
+                return true;
+
+            Vector3 forward = owner.transform.forward;
+            forward.y = 0f;
+            if (forward.sqrMagnitude < 0.0001f) forward = Vector3.forward;
+            else forward.Normalize();
+            Vector3 right = new Vector3(forward.z, 0f, -forward.x);
+            // Search around the owner, not around a point which may lie through a wall.
+            for (int ring = 0; ring < 3; ring++)
+            {
+                float radius = ring == 0 ? 1.5f : ring == 1 ? 1.0f : 0.6f;
+                for (int direction = 0; direction < 8; direction++)
+                {
+                    float angle = direction * Mathf.PI / 4f;
+                    Vector3 candidate = owner.position +
+                        (forward * Mathf.Cos(angle) + right * Mathf.Sin(angle)) * radius;
+                    candidate.y = desired.y;
+                    if (TryPlacement(owner, candidate, drone, cfg, ground, false, out target))
+                        return true;
+                }
+            }
+
+            Vector3 atOwner = owner.position;
+            atOwner.y = desired.y;
+            // Allow brief owner overlap only for the final center candidate. Do not
+            // ignore walls, ceilings, other entities or other drones.
+            return TryPlacement(owner, atOwner, drone, cfg, ground, true, out target);
+        }
+
+        private static bool TryPlacement(EntityPlayerLocal owner, Vector3 desired, EntityDrone drone,
+            ExcuseMeDroneConfig cfg, bool ground, bool allowOwnerOverlap, out Vector3 target)
+        {
+            target = desired;
             World world = GameManager.Instance != null ? GameManager.Instance.World : null;
-            if (world == null)
+            if (world == null) return false;
+
+            // Unity physics uses floating-origin coordinates; entity positions and
+            // block queries use absolute world coordinates.
+            Vector3 origin = Origin.position;
+            if (ground)
             {
-                DebugLog("Ground lookup failed: World is unavailable.");
-                return desired;
+                Vector3 rayStart = new Vector3(desired.x, owner.position.y + 0.75f, desired.z);
+                RaycastHit[] hits = Physics.RaycastAll(rayStart - origin, Vector3.down, 1.5f,
+                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+                float nearest = float.MaxValue;
+                bool found = false;
+                for (int i = 0; i < hits.Length; i++)
+                {
+                    RaycastHit hit = hits[i];
+                    if (hit.collider == null || IsEntityCollider(hit.collider, drone) ||
+                        IsEntityCollider(hit.collider, owner) || hit.normal.y < 0.5f) continue;
+                    Vector3 point = hit.point + origin;
+                    // Require a movement-blocking world block below the hit. An
+                    // entity's collider must never become the selected "floor".
+                    Vector3 below = point - Vector3.up * 0.05f;
+                    BlockValue block = world.GetBlock(Mathf.FloorToInt(below.x),
+                        Mathf.FloorToInt(below.y), Mathf.FloorToInt(below.z));
+                    if (block.isair || !block.Block.IsCollideMovement) continue;
+                    if (hit.distance >= nearest) continue;
+                    nearest = hit.distance;
+                    target.y = point.y + cfg.GroundClearance;
+                    found = true;
+                }
+                if (!found) return false;
             }
 
-            float groundY = world.GetHeightAt(desired.x, desired.z);
-            if (float.IsNaN(groundY) || float.IsInfinity(groundY))
+            // Conservative clearance above the drone's placement pivot. The test
+            // covers its body, including the sides and overhead space.
+            Vector3 halfSize = new Vector3(0.45f, 0.40f, 0.45f);
+            Vector3 center = target - origin + Vector3.up * 0.45f;
+            int count = Physics.OverlapBoxNonAlloc(center, halfSize, PlacementOverlaps,
+                Quaternion.identity, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            if (count >= PlacementOverlaps.Length) return false;
+            for (int i = 0; i < count; i++)
             {
-                DebugLog("Ground lookup failed: invalid height value.");
-                return desired;
+                Collider collider = PlacementOverlaps[i];
+                if (collider == null || IsEntityCollider(collider, drone)) continue;
+                if (allowOwnerOverlap && IsEntityCollider(collider, owner)) continue;
+                return false;
             }
+            return true;
+        }
 
-            Vector3 grounded = desired;
-            grounded.y = groundY + cfg.GroundClearance;
-            DebugLog("Ground lookup: y=" + groundY.ToString("F2") +
-                ", targetY=" + grounded.y.ToString("F2") + ".");
-            return grounded;
+        private static bool IsEntityCollider(Collider collider, Entity entity)
+        {
+            return entity != null && entity.transform != null &&
+                (collider.transform == entity.transform || collider.transform.IsChildOf(entity.transform));
         }
 
         private static Vector3 ComputeBrokenSummonTarget(EntityPlayerLocal owner, ExcuseMeDroneConfig cfg)

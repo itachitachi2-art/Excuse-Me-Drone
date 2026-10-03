@@ -1,0 +1,7 @@
+Excuse Me, Drone 1.0.1
+
+Run package.cmd to build and create ExcuseMeDrone-1.0.1.zip for distribution.
+Run build.cmd to build only. Close the game before replacing the installed DLL. Keep your current config.
+
+Far-distance Stay recall supports single-player and the local host.
+Validation: actual game assembly compilation and 15 extracted-method tests passed; user reported successful in-game testing.

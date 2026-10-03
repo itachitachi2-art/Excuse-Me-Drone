@@ -16,7 +16,6 @@ namespace Itachi.ExcuseMeDrone
         }
 
         internal KeyCode SummonKey = KeyCode.F10;
-        internal float SummonDistance = 5.0f;
         internal float SummonForwardDistance = 1.50f;
         internal float SummonHeightOffset = 1.20f;
         internal bool GroundSnapEnabled = true;
@@ -69,8 +68,6 @@ namespace Itachi.ExcuseMeDrone
 
                 // New names first; old v0.1.12 Menu* names are accepted for config compatibility.
                 config.SummonKey = ParseKey(values, "SummonKey", ParseKey(values, "MenuKey", config.SummonKey));
-                config.SummonDistance = ParseFloat(values, "SummonDistance",
-                    ParseFloat(values, "MenuRescueDistance", config.SummonDistance, 0f, 50f), 0f, 50f);
                 config.SummonForwardDistance = ParseFloat(values, "SummonForwardDistance",
                     ParseFloat(values, "MenuTeleportForwardDistance", config.SummonForwardDistance, 0.5f, 5f), 0.5f, 5f);
                 config.SummonHeightOffset = ParseFloat(values, "SummonHeightOffset",
@@ -132,7 +129,8 @@ namespace Itachi.ExcuseMeDrone
         {
             string raw;
             KeyCode value;
-            return values.TryGetValue(key, out raw) && Enum.TryParse(raw, true, out value) ? value : fallback;
+            return values.TryGetValue(key, out raw) && Enum.TryParse(raw, true, out value) &&
+                Enum.IsDefined(typeof(KeyCode), value) && value != KeyCode.None ? value : fallback;
         }
     }
 }
