@@ -1,6 +1,26 @@
-# Excuse Me, Drone v1.0.3 candidate — 7 Days to Die v3.2
+# Excuse Me, Drone v1.0.4 candidate — 7 Days to Die v3.3
 
 A small quality-of-life mod for the robotic drone.
+
+## 1.0.4 revenge-registration guard
+
+This candidate adds one Harmony prefix to `EntityAlive.SetRevengeTarget(EntityAlive)`.
+It skips non-null registrations only when the receiving entity is an `EntityDrone`
+(including subclasses). True null clears and every non-drone call continue normally.
+It applies to all attackers and setter callers, including players, zombies and scripts;
+it is not restricted to bullets or blade traps. A destroyed Unity wrapper that compares
+equal to null but is still a non-null managed reference is also blocked.
+
+No damage, HP, hit events, sensors, attack tasks, healing or movement code is changed
+by this guard. Normal AI may still independently select and attack enemies. Existing
+revenge/attack targets are not forcibly cleared, and this does not promise an immediate
+stop to combat already in progress. Other mods that bypass this setter are outside
+the guard. There is no new setting, per-frame cleanup, or local-player ownership gate.
+
+The source baseline is PR #2, commit `441fcd4b6d7639c27f32b1fdc2fd2c1c8468211f`
+(1.0.3 candidate), rather than the older 0.1.25 main branch. The Controller, Config
+implementation, previous patches and Windows build scripts remain byte-for-byte
+unchanged. The effective cfg settings are unchanged; only its header identifies 1.0.4.
 
 ## Recall and automatic movement
 
@@ -26,10 +46,16 @@ Run `build.cmd` or `package.cmd` on Windows, optionally supplying the game insta
 
 ## Validation
 
-- Changed Controller/Config compiled against the available actual 7DTD/Unity assemblies.
-- 25 extracted-production-method placement/rescue/redraw cases passed with deterministic physics/world doubles.
-- 15 extracted-method summon-flow regression cases passed, including unloaded Stay recall and cancellation.
-- Full Harmony build, Unity physics behavior and in-game rendering remain to be validated on the user's installation.
+- All five production sources compiled with C# 5 and the supplied actual v3.3 game/Unity/Harmony references. The supplemental build uses Mono; Windows Framework csc was not run here.
+- 21 direct production-prefix cases and 5 real bundled-Harmony patch/unpatch cases passed on controlled entity doubles.
+- The existing 25 extracted-production-method placement/rescue/redraw cases passed again with deterministic physics/world doubles, using a Mono host.
+- Static checks preserve protected baseline files and keep the 1.0.4 version markers consistent.
+- The historical 15 summon-flow cases reported for 1.0.3 are not present in the baseline repository and were not rerun.
+- Full game Harmony PatchAll, bullet/blade reproduction, native AI, damage/healing, physics/rendering and multiplayer remain unverified. A server-authoritative installation is needed to affect server registration; a client-only install is not a verified solution.
+
+See `REVENGE_GUARD_DEVELOPMENT.md` for API evidence and the validation boundaries.
+The supplementary `tests/run-candidate-tests.py --help` documents its explicit local
+tool/reference paths. It does not install an SDK or replace the Windows build workflow.
 
 Run the placement cases with .NET 8 and Roslyn:
 

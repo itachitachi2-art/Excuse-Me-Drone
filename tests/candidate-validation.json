@@ -1,0 +1,80 @@
+{
+  "baseline_commit": "441fcd4b6d7639c27f32b1fdc2fd2c1c8468211f",
+  "mod_version": "1.0.4",
+  "game_executed": false,
+  "windows_csc_executed": false,
+  "real_game_harmony_patchall_executed": false,
+  "checks": [
+    {
+      "name": "candidate-contract",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "actual-v33-build",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "revenge-compile",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "revenge-controlled-harmony",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "placement-compile",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "placement-regression",
+      "exit_code": 0,
+      "status": "PASS"
+    }
+  ],
+  "source_sha256": {
+    "Scripts/ExcuseMeDroneConfig.cs": "cc2c9045e26f4209294fb0a5f339b503d0ff89b1a0a8060f2db98597f055d6f3",
+    "Scripts/ExcuseMeDroneController.cs": "1b165f5e922c12d6f53edce661ef569a08679d9d8a32bf4f7b2be86e7997c1ea",
+    "Scripts/ExcuseMeDroneMod.cs": "1ab2768b0a86002cfb2bd3a37c301c1aa124bea97c7465818725012d43c56215",
+    "Scripts/ExcuseMeDronePatches.cs": "5c36660330210342c1d79e8366bd84a70b79de3757782883dcf4e07618ceb11e",
+    "Scripts/ExcuseMeDroneRevengePatch.cs": "549e88bbbf3a1039b64915903c7ff29b20219e1800b359152969c3f641f7f0f3"
+  },
+  "references_sha256": {
+    "mscorlib.dll": "98c9b62133db5dd33b22bc6aab6f28e4f04f5b5be6559b28ba5c2738241434d0",
+    "System.dll": "ace2dd6a7d534b581bf4a9d316e743d64508ca2135db73dbff0ddb9365fc454e",
+    "System.Core.dll": "f1b33eb1ae8522edcf9ba4c2b85f532d4bab68bfa2a51527264bb61619bed4ea",
+    "netstandard.dll": "6ae62e082dc494a2433984177f60ca4db5fae69b1f360a8b33754172b310b8c5",
+    "Assembly-CSharp.dll": "fceec27300ffd3a1f97b097e43b60f3b07597f441e7ecbc6e1b59eebb234c705",
+    "UnityEngine.dll": "f03b83c7f79969406cf6fcb1d20bc99c15ad123bd0f7a9856adeff0766041649",
+    "UnityEngine.CoreModule.dll": "68d360251a7aea19cba74626d5e9d55e801c51dda1f4b153b5ba4825c19c9e35",
+    "UnityEngine.InputLegacyModule.dll": "6d40162c06bfdbd965e616745705c2e450013a7e74ca116dc5e0ae26f8b4c7a9",
+    "UnityEngine.PhysicsModule.dll": "3316f39284d7404d3d6b025aded2560469e93a49806b66de6855bac20f4db3e6",
+    "System.Runtime.Serialization.dll": "c1058a78e3828052b92d535d8fb27f9f3c9eb9cbfcdee1904898611b44d7cdb7",
+    "System.Xml.dll": "7a3587565cabf8294cfc372991545f3ae5790d54264e40069f5e0e460b66bc55",
+    "System.Xml.Linq.dll": "48b11f5d3a51034f9b9d330082f9099a0e68956ee2153d151cdf146bf9e76c78",
+    "0Harmony.dll": "c349e1a3fd13fa5a9facc9805a5e160161b14489f46f6bdd38202b8e124f78df"
+  },
+  "build_scripts_sha256": {
+    "build.cmd": "98f6f8a4c730a6c4cd827872b52f0db27e8e10fc90e143058d0570a7a3e4b94a",
+    "build.ps1": "59a0b021926f7f9d58328712f57845366e182d6f1c889c032401ceee3ec32c4b"
+  },
+  "production_language_version": "5",
+  "reference_list_matches_windows_build": true,
+  "nostdlib_and_command_line_noconfig": true,
+  "dll_sha256": "f24ebc39c50ad0314bfb2f61b0fdb26a69869e69515784b33645696a3326b652",
+  "direct_prefix_cases": 21,
+  "real_harmony_controlled_cases": 5,
+  "placement_regression_cases": 25,
+  "status": "PASS_BUILD_AND_51_CONTROLLED_CASES",
+  "limitations": [
+    "Real Harmony patching uses controlled entity doubles, not Assembly-CSharp/Unity execution.",
+    "The 25 placement cases use deterministic physics/world doubles; the original .NET8 runner is unchanged.",
+    "Historical 15 summon-flow tests were not present in the baseline repository and were not rerun.",
+    "Bullets, blades, damage, rendering, normal defense/healing, F10 and multiplayer need in-game validation.",
+    "Windows Framework csc scripts remain unchanged but were not executed in this Linux environment."
+  ]
+}

@@ -1,3 +1,12 @@
+Excuse Me, Drone 1.0.4 candidate - not published
+
+Add a drone-only guard to EntityAlive.SetRevengeTarget(EntityAlive).
+Block every non-null revenge registration through this setter, regardless of attacker/source.
+Preserve native null clears, non-drone behavior, normal AI, damage and existing F10/movement code.
+Normal AI can still attack independently; existing targets are not forcibly cleared.
+Full actual-v3.3 reference build and 51 controlled cases passed; game validation remains pending.
+
+Historical 1.0.3 candidate notes:
 Excuse Me, Drone 1.0.3 candidate
 
 Replace global height-map teleport placement with nearby floor and clearance checks.

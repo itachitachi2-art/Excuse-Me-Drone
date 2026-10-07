@@ -7,5 +7,5 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-echo Upload ExcuseMeDrone-1.0.1.zip to Nexus Mods.
+echo Candidate package: ExcuseMeDrone-1.0.4.zip. In-game validation required before publication.
 pause

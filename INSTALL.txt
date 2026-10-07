@@ -1,8 +1,9 @@
-Excuse Me, Drone 1.0.3 - 7 Days to Die 3.2
+Excuse Me, Drone 1.0.4 candidate - 7 Days to Die 3.3 (in-game validation pending)
 
 INSTALL / UPDATE
 1. Close the game.
-2. Back up Config/ExcuseMeDrone.cfg if you have customized it.
+2. Back up the entire installed ExcuseMeDrone folder, including its DLL,
+   ModInfo.xml and any customized Config/ExcuseMeDrone.cfg.
 3. Replace the existing ExcuseMeDrone folder in your game's Mods folder
    with the ExcuseMeDrone folder from this archive. Do not keep two copies.
 4. Restore your preferred settings in Config/ExcuseMeDrone.cfg.
@@ -16,3 +17,12 @@ Follow mode: recall immediately at any distance, including with inventory open.
 Stay mode: confirmation is required. OK switches to Follow before recall.
 Cancel leaves the drone in Stay mode without moving it.
 Broken drone recall does not repair the drone.
+
+1.0.4 CANDIDATE SCOPE
+This blocks all non-null drone revenge registrations through SetRevengeTarget,
+including zombie/script sources, while allowing native null clears and non-drone calls.
+Normal AI may still independently attack. Existing targets are not forcibly cleared.
+No new damage, HP, movement or healing changes are introduced by this guard.
+Actual-v3.3 reference compilation and 51 controlled cases passed.
+Game/Unity behavior and multiplayer are unverified; start with single-player/local host.
+For rollback, close the game and restore the backed-up DLL, ModInfo.xml and config.

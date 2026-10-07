@@ -1,4 +1,18 @@
-# Excuse Me, Drone v1.0.3 test checklist
+# Excuse Me, Drone v1.0.4 test checklist
+
+## 1.0.4 revenge guard (all in-game checks pending)
+
+- Start with a fresh game process; compare the unchanged 1.0.3 baseline and candidate under the same conditions. Close the game between DLL swaps. Do not hot-patch.
+- Confirm the log shows v1.0.4 and successful Harmony PatchAll without an exception.
+- Test bullet and blade single/repeated hits, owner/other player, allies/non-allies, and blade owners that are absent/unresolved. Record observed attacks separately from actual HP changes.
+- When a registration is observable, candidate drones must reject non-null SetRevengeTarget calls from players, zombies and scripts. True null clears must continue. Use a debugger or separate temporary test instrumentation if needed; this candidate adds no recurring logs.
+- Do not infer success solely from an absence of attack in a condition where baseline also does not retaliate. Record that as not reproduced.
+- Existing targets must not be forcibly cleared by this patch. Normal AI can still choose enemies independently.
+- Verify drone HP loss, armor/friend checks, hit effects, shutdown and repair. Blade self-wear must remain; it is not drone retaliation.
+- Verify ordinary zombie defense/stun-weapon use, healing, follow/stay and inventory access. Non-drone revenge must remain native.
+- Repeat every relevant F10, current-floor and broken-redraw check below.
+- Single-player/local-host first. Dedicated/remote authority and installation need separate validation; client-only success is not assumed.
+- If the observed issue follows another path, keep the repro/log evidence and investigate that path. Do not mark this candidate as a confirmed fix or broaden it to immunity/disabled AI.
 
 ## Broken drone F10
 
