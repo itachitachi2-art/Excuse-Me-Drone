@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-17",
+  "version": "1.0.4",
+  "status": "PREPARED_NOT_PUBLISHED",
+  "production_source_commit": "3b11adaeeca9d3fd4f87d8f3225e8f7afcd060ab",
+  "branch": "feature/drone-revenge-guard-v1.0.4",
+  "maintainer_test_report": {
+    "result": "PASS_REPORTED_BY_MAINTAINER",
+    "scope": "Maintainer reported test OK and requested GitHub reflection and release preparation.",
+    "individual_case_results_supplied": false,
+    "installed_binary_hash_measured": false,
+    "note": "Do not interpret this general report as independent verification of every checklist item or multiplayer."
+  },
+  "supplied_test_archive": {
+    "name": "ExcuseMeDrone-v1.0.4-candidate-test-rebuild.zip",
+    "bytes": 55719,
+    "sha256": "9833ade2aa72d066e5e83cc479d09672a9d96955ecdba28a743a0b090a65d7f2",
+    "repository_files_compared": 26,
+    "all_repository_files_equal_source_commit": true,
+    "dll_bytes": 23552,
+    "dll_sha256": "7894af242bb1492a9ab3785de7ef4c3567875cdb622bf34de4aba34200f4ff60",
+    "dll_matches_supplied_build_verification": true
+  },
+  "release_preparation": {
+    "production_source_changed": false,
+    "runtime_config_changed": false,
+    "modinfo_changed": false,
+    "dll_rebuilt": false,
+    "dll_reused_byte_for_byte": true,
+    "windows_build_scripts_changed": false,
+    "historical_51_controlled_cases_rerun": false,
+    "game_launched_by_preparer": false,
+    "ci_run": false,
+    "main_merged": false,
+    "release_published": false
+  },
+  "binary_provenance": {
+    "record": "tests/test-rebuild-validation.json",
+    "compiler": "Roslyn SDK 8.0.425, C# 5, actual game references",
+    "harmony_compile_reference": "NuGet Lib.Harmony 2.3.3 net472; not bundled",
+    "historical_mono_dll_sha256": "f24ebc39c50ad0314bfb2f61b0fdb26a69869e69515784b33645696a3326b652",
+    "note": "The supplied rebuilt DLL differs from the historical Mono DLL recorded in candidate-validation.json; their production source is identical."
+  },
+  "remaining_limits": [
+    "Per-scenario test results were not supplied; no blanket claim is made for the complete checklist.",
+    "Dedicated/remote multiplayer remains unverified.",
+    "The installed DLL was not read from the maintainer computer; artifact identity refers to the provided test archive.",
+    "Publication and any main-branch merge remain separate actions."
+  ]
+}

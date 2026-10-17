@@ -1,10 +1,12 @@
-Excuse Me, Drone 1.0.4 candidate - not published
+Excuse Me, Drone 1.0.4 - release notes prepared; not published
 
 Add a drone-only guard to EntityAlive.SetRevengeTarget(EntityAlive).
 Block every non-null revenge registration through this setter, regardless of attacker/source.
 Preserve native null clears, non-drone behavior, normal AI, damage and existing F10/movement code.
 Normal AI can still attack independently; existing targets are not forcibly cleared.
-Full actual-v3.3 reference build and 51 controlled cases passed; game validation remains pending.
+Maintainer reported test OK on 2026-10-17; the prepared package reuses the supplied test-rebuild DLL unchanged.
+Historical actual-v3.3 reference build and 51 controlled cases passed; no rebuild or new game test was performed for packaging.
+Individual checklist results and dedicated/remote multiplayer support are not established by that general report.
 
 Historical 1.0.3 candidate notes:
 Excuse Me, Drone 1.0.3 candidate
@@ -13,7 +15,7 @@ Replace global height-map teleport placement with nearby floor and clearance che
 Apply to manual summon, combat dodge, stuck rescue, and broken-drone redraw.
 Rescue stationary drones on nearby floors with at least 3 m vertical separation.
 Retain v1.0.1 unloaded-drone recall and Stay confirmation.
-In-game validation pending.
+At the time of the 1.0.3 candidate, individual in-game results were not recorded.
 
 Restore ground-placement redraw when local floor/clearance search fails.
 Never mark the broken-drone ground step complete without executing its teleport.

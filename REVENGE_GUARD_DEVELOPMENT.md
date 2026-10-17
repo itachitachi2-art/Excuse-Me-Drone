@@ -21,7 +21,7 @@ The user's supplied `Assembly-CSharp.dll` was inspected read-only:
 - `DroneSensors.GetNearestEnemyInRange` checks revenge before normal enemy selection. Suppressing this registration does not suppress independent normal selection.
 - The shipped `0Harmony.dll` is version `2.13.0.0`, SHA-256 `c349e1a3fd13fa5a9facc9805a5e160161b14489f46f6bdd38202b8e124f78df`; its `(Type, string, Type[])` patch attribute is available.
 
-## Validation performed
+## Historical automated validation performed
 
 1. All 20 baseline blobs were checked against their GitHub blob identities before editing.
 2. Every production source, including mod entry and both old/new Harmony patch files, compiled against the actual supplied v3.3 references. The supplemental Linux Mono build uses the Windows script's exact required/available-optional reference list, C# 5, `/nostdlib+` and command-line `/noconfig`.
@@ -33,7 +33,27 @@ The user's supplied `Assembly-CSharp.dll` was inspected read-only:
 
 The historical 15 summon-flow tests are absent from the baseline repository and were not rerun. No Unity/game launch, real-game PatchAll, Windows csc run, multiplayer session or in-game bullet/blade reproduction was performed. The automated checks establish a buildable candidate, not a verified in-game fix.
 
-## Home test and rollback
+## Release preparation (2026-10-17)
+
+The maintainer reported test OK and requested release preparation.
+The supplied test-rebuild archive contains all 26 repository files byte-for-byte equal
+to production source commit `3b11adaeeca9d3fd4f87d8f3225e8f7afcd060ab`.
+The prepared runtime ZIP reuses its DLL without rebuilding it:
+SHA-256 `7894af242bb1492a9ab3785de7ef4c3567875cdb622bf34de4aba34200f4ff60`.
+Production code, ModInfo and configuration are unchanged.
+
+This is the supplied Roslyn/C# 5 rebuild, compiled against v3.3 game references
+and Lib.Harmony 2.3.3 net472. It is not the older Mono binary recorded in
+`tests/candidate-validation.json`. The supplied rebuild provenance is preserved in
+`tests/test-rebuild-validation.json`; current acceptance and artifact identity are
+recorded in `tests/release-preparation-20261017.json`.
+
+The general pass report does not enumerate every checklist item or establish
+dedicated/remote multiplayer support. The installed DLL was not read from the
+maintainer's computer. No new game session, rebuild or CI run was performed for
+this documentation/packaging update. The branch remains an unpublished candidate.
+
+## Targeted test reference and rollback
 
 Close the game, back up the installed mod and custom cfg, and replace the DLL plus ModInfo with this candidate. Do not hot-swap or keep duplicate mod folders. Restart for a clean test.
 

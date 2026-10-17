@@ -1,0 +1,43 @@
+{
+  "source_commit": "3b11adaeeca9d3fd4f87d8f3225e8f7afcd060ab",
+  "version": "1.0.4",
+  "source_changes": false,
+  "compiler": "Roslyn SDK 8.0.425, C# 5, actual game references",
+  "game_sha256": "fceec27300ffd3a1f97b097e43b60f3b07597f441e7ecbc6e1b59eebb234c705",
+  "harmony_reference": "NuGet Lib.Harmony 2.3.3 net472; not bundled",
+  "production_dll_sha256": "7894af242bb1492a9ab3785de7ef4c3567875cdb622bf34de4aba34200f4ff60",
+  "checks": {
+    "build": "PASS, no diagnostics",
+    "protected_source_contract": "PASS",
+    "placement_controlled_cases": 25,
+    "revenge_direct_cases": 21,
+    "revenge_harmony_controlled_cases": 5
+  },
+  "game_execution": false,
+  "windows_csc_executed": false,
+  "note": "Controlled Harmony tests use net8.0 Lib.Harmony 2.4.2 with harness-only UnpatchSelf to UnpatchAll(harmony.Id) compatibility adapter, not the game runtime. No Unity/rendering/multiplayer test. Historical summon 15 cases not present, not rerun. Repository historical Mono build differs from this Roslyn rebuild.",
+  "source_sha256": {
+    "Scripts/ExcuseMeDroneController.cs": "1b165f5e922c12d6f53edce661ef569a08679d9d8a32bf4f7b2be86e7997c1ea",
+    "Scripts/ExcuseMeDroneRevengePatch.cs": "549e88bbbf3a1039b64915903c7ff29b20219e1800b359152969c3f641f7f0f3",
+    "Scripts/ExcuseMeDroneMod.cs": "1ab2768b0a86002cfb2bd3a37c301c1aa124bea97c7465818725012d43c56215",
+    "Scripts/ExcuseMeDronePatches.cs": "5c36660330210342c1d79e8366bd84a70b79de3757782883dcf4e07618ceb11e",
+    "Scripts/ExcuseMeDroneConfig.cs": "cc2c9045e26f4209294fb0a5f339b503d0ff89b1a0a8060f2db98597f055d6f3"
+  },
+  "reference_sha256": {
+    "mscorlib.dll": "98c9b62133db5dd33b22bc6aab6f28e4f04f5b5be6559b28ba5c2738241434d0",
+    "System.dll": "ace2dd6a7d534b581bf4a9d316e743d64508ca2135db73dbff0ddb9365fc454e",
+    "System.Core.dll": "f1b33eb1ae8522edcf9ba4c2b85f532d4bab68bfa2a51527264bb61619bed4ea",
+    "netstandard.dll": "6ae62e082dc494a2433984177f60ca4db5fae69b1f360a8b33754172b310b8c5",
+    "Assembly-CSharp.dll": "fceec27300ffd3a1f97b097e43b60f3b07597f441e7ecbc6e1b59eebb234c705",
+    "UnityEngine.dll": "f03b83c7f79969406cf6fcb1d20bc99c15ad123bd0f7a9856adeff0766041649",
+    "UnityEngine.CoreModule.dll": "68d360251a7aea19cba74626d5e9d55e801c51dda1f4b153b5ba4825c19c9e35",
+    "UnityEngine.InputLegacyModule.dll": "6d40162c06bfdbd965e616745705c2e450013a7e74ca116dc5e0ae26f8b4c7a9",
+    "UnityEngine.PhysicsModule.dll": "3316f39284d7404d3d6b025aded2560469e93a49806b66de6855bac20f4db3e6",
+    "System.Runtime.Serialization.dll": "c1058a78e3828052b92d535d8fb27f9f3c9eb9cbfcdee1904898611b44d7cdb7",
+    "System.Xml.dll": "7a3587565cabf8294cfc372991545f3ae5790d54264e40069f5e0e460b66bc55",
+    "System.Xml.Linq.dll": "48b11f5d3a51034f9b9d330082f9099a0e68956ee2153d151cdf146bf9e76c78"
+  },
+  "all_repository_blob_checks": 26,
+  "modinfo_sha256": "4c999833efb510f57e1a6230e37e8971210ac301879a4aaf3e24c77ff842f0e3",
+  "config_sha256": "45119a0fccceec9a0e628850ca0b417469a9b66d7854a483fd4f01277a6f5150"
+}

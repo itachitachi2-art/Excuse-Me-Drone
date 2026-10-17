@@ -1,6 +1,15 @@
 # Excuse Me, Drone v1.0.4 test checklist
 
-## 1.0.4 revenge guard (all in-game checks pending)
+## Acceptance update (2026-10-17)
+
+The maintainer reported test OK and supplied the v1.0.4 test-rebuild archive for release
+preparation. See `tests/release-preparation-20261017.json` for verified source/DLL
+identity and the limits of this general report. Individual results for the complete
+matrix below were not supplied. This checklist is retained for reference and targeted
+regressions, not a claim that every item passed or a request to repeat all tests.
+Dedicated/remote multiplayer remains unverified.
+
+## 1.0.4 revenge guard reference checklist
 
 - Start with a fresh game process; compare the unchanged 1.0.3 baseline and candidate under the same conditions. Close the game between DLL swaps. Do not hot-patch.
 - Confirm the log shows v1.0.4 and successful Harmony PatchAll without an exception.
@@ -12,7 +21,7 @@
 - Verify ordinary zombie defense/stun-weapon use, healing, follow/stay and inventory access. Non-drone revenge must remain native.
 - Repeat every relevant F10, current-floor and broken-redraw check below.
 - Single-player/local-host first. Dedicated/remote authority and installation need separate validation; client-only success is not assumed.
-- If the observed issue follows another path, keep the repro/log evidence and investigate that path. Do not mark this candidate as a confirmed fix or broaden it to immunity/disabled AI.
+- If the observed issue follows another path, keep the repro/log evidence and investigate that path. Do not infer additional scenario coverage from the general pass report or broaden it to immunity/disabled AI.
 
 ## Broken drone F10
 
@@ -55,7 +64,7 @@ Useful logs:
 - Repeat from inventory/menu, with nearby and distant drones, and with a custom cfg summon key.
 
 
-## v1.0.3 current-floor placement (in-game checks pending)
+## v1.0.3 current-floor placement reference checklist
 
 - Recall healthy drones from the ground floor, middle floor, roof and underground; confirm the target stays on the player's current level.
 - Face a wall and press recall: confirm another nearby candidate is used.

@@ -44,14 +44,34 @@ Automatic movement is skipped if no clear candidate exists. Healthy manual recal
 
 Run `build.cmd` or `package.cmd` on Windows, optionally supplying the game installation directory. The scripts use Windows' C# compiler and the game's runtime references. Harmony is resolved from the game or local `References`; game/Harmony assemblies are not included in this repository.
 
-## Validation
+## Release preparation (2026-10-17)
+
+The maintainer reported test OK and requested release preparation.
+The supplied test-rebuild archive contains all 26 repository files byte-for-byte equal
+to production source commit `3b11adaeeca9d3fd4f87d8f3225e8f7afcd060ab`.
+The prepared runtime ZIP reuses its DLL without rebuilding it:
+SHA-256 `7894af242bb1492a9ab3785de7ef4c3567875cdb622bf34de4aba34200f4ff60`.
+Production code, ModInfo and configuration are unchanged.
+
+This is the supplied Roslyn/C# 5 rebuild, compiled against v3.3 game references
+and Lib.Harmony 2.3.3 net472. It is not the older Mono binary recorded in
+`tests/candidate-validation.json`. The supplied rebuild provenance is preserved in
+`tests/test-rebuild-validation.json`; current acceptance and artifact identity are
+recorded in `tests/release-preparation-20261017.json`.
+
+The general pass report does not enumerate every checklist item or establish
+dedicated/remote multiplayer support. The installed DLL was not read from the
+maintainer's computer. No new game session, rebuild or CI run was performed for
+this documentation/packaging update. The branch remains an unpublished candidate.
+
+## Historical automated source validation
 
 - All five production sources compiled with C# 5 and the supplied actual v3.3 game/Unity/Harmony references. The supplemental build uses Mono; Windows Framework csc was not run here.
 - 21 direct production-prefix cases and 5 real bundled-Harmony patch/unpatch cases passed on controlled entity doubles.
 - The existing 25 extracted-production-method placement/rescue/redraw cases passed again with deterministic physics/world doubles, using a Mono host.
 - Static checks preserve protected baseline files and keep the 1.0.4 version markers consistent.
 - The historical 15 summon-flow cases reported for 1.0.3 are not present in the baseline repository and were not rerun.
-- Full game Harmony PatchAll, bullet/blade reproduction, native AI, damage/healing, physics/rendering and multiplayer remain unverified. A server-authoritative installation is needed to affect server registration; a client-only install is not a verified solution.
+- The historical automation did not execute full game Harmony PatchAll, bullet/blade reproduction, native AI, damage/healing, physics/rendering or multiplayer. The later maintainer pass report is recorded separately above. A server-authoritative installation is needed to affect server registration; dedicated/remote and client-only installation are not verified solutions.
 
 See `REVENGE_GUARD_DEVELOPMENT.md` for API evidence and the validation boundaries.
 The supplementary `tests/run-candidate-tests.py --help` documents its explicit local

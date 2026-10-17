@@ -1,4 +1,4 @@
-Excuse Me, Drone 1.0.4 candidate - 7 Days to Die 3.3 (in-game validation pending)
+Excuse Me, Drone 1.0.4 - 7 Days to Die 3.3 (release prepared; not yet published)
 
 INSTALL / UPDATE
 1. Close the game.
@@ -23,6 +23,9 @@ This blocks all non-null drone revenge registrations through SetRevengeTarget,
 including zombie/script sources, while allowing native null clears and non-drone calls.
 Normal AI may still independently attack. Existing targets are not forcibly cleared.
 No new damage, HP, movement or healing changes are introduced by this guard.
-Actual-v3.3 reference compilation and 51 controlled cases passed.
-Game/Unity behavior and multiplayer are unverified; start with single-player/local host.
+The maintainer reported test OK on 2026-10-17. This package reuses the supplied
+v1.0.4 test-rebuild DLL without recompiling it. Earlier records report actual-v3.3
+compilation and 51 controlled cases; these were not rerun for packaging.
+The general report does not certify every scenario or dedicated/remote multiplayer.
+Use single-player/local host; dedicated/remote installation remains unverified.
 For rollback, close the game and restore the backed-up DLL, ModInfo.xml and config.
