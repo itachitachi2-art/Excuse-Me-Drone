@@ -1,9 +1,10 @@
 {
-  "version": "1.0.6",
-  "game_reference": "3.4 b10 supplied Assembly-CSharp",
+  "version": "1.0.7",
   "compile": "PASS",
+  "game_reference": "3.4 b10",
   "hotkey_assertions": 65,
   "regression_cases": 51,
   "game_executed": false,
-  "dll_sha256": "46dbab6415e24dbc3577b3e81c7f1213d2a35cdd1362181061a655f22263897e"
+  "combat_guard_source_contract": "PASS",
+  "dll_sha256": "5651e1fb35dae0a2fcc4b691b7d26a1b261ca7f863c1f1bed4361b7637b6e765"
 }

@@ -4,7 +4,7 @@
   <DisplayName value="Excuse Me, Drone" />
   <Description value="One-shot combat dodge, stuck rescue, summon hotkey, optional invisibility, and a drone-only revenge registration guard." />
   <Author value="Itachi &amp; Ai" />
-  <Version value="1.0.6" />
+  <Version value="1.0.7" />
   <Website value="" />
   <SkipWithAntiCheat value="true" />
 </xml>

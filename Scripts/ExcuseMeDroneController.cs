@@ -93,7 +93,10 @@ namespace Itachi.ExcuseMeDrone
                 return;
             }
 
-            if (cfg.CombatDodgeEnabled)
+            // Keep the manual lock intent authoritative even while native combat
+            // temporarily suspends positioning. Do not interrupt a stun/heal with
+            // this mod's forced sideways combat teleport. Native retreat is untouched.
+            if (cfg.CombatDodgeEnabled && !ExcuseMeDroneHotkeys.IsLockRequested(drone))
                 UpdateCombatDodge(drone, owner, state, cfg);
 
             if (cfg.StuckRescueEnabled)

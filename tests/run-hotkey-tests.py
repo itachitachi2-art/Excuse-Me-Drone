@@ -14,6 +14,8 @@ assert '!IsShutdownOrBroken(drone)' in body
 assert '!state.PendingBrokenRevive' in body
 assert '!state.PendingBrokenReshutdown' in body
 assert 'ExcuseMeDroneHotkeys.ReleaseWithoutSummon(drone);' in controller
+assert re.search(r'if\s*\(cfg\.CombatDodgeEnabled\s*&&\s*!ExcuseMeDroneHotkeys\.IsLockRequested\(drone\)\)\s*UpdateCombatDodge\(drone, owner, state, cfg\);', controller)
+print('PASS static combat-dodge guard uses requested intent, not effective positioning state')
 print('PASS static CanLock broken/pending-revive/pending-reshutdown guard and summon-release contract (not runtime coverage)')
 out = root / 'tests/hotkey-output' 
 out.mkdir(exist_ok=True)
