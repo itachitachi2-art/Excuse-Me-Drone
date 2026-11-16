@@ -1,4 +1,4 @@
-Excuse Me, Drone 1.0.7 - 7 Days to Die 3.4 b10
+Excuse Me, Drone 1.0.8 - 7 Days to Die 3.4 b10
 
 1. Close the game and back up the old mod folder and customized config.
 2. Replace the existing Mods/ExcuseMeDrone folder with ExcuseMeDrone from this ZIP.
@@ -8,11 +8,11 @@ Excuse Me, Drone 1.0.7 - 7 Days to Die 3.4 b10
 4. Keep the bundled 0_TFP_Harmony installed and disable EAC.
 
 F10: existing drone summon. Also cancels behind lock.
-@: toggle behind lock, 3 m behind the owner's body direction by default.
+Home: toggle behind lock, 3 m behind the owner's body direction by default.
    Toggle OFF returns to Follow and summons in front.
-:: toggle the owned drone's inventory within normal interaction range.
+End: toggle the owned drone's inventory within normal interaction range.
 
-Remap BehindLockKey=At and InventoryKey=Colon to single Unity KeyCode names
+Remap BehindLockKey=Home and InventoryKey=End to single Unity KeyCode names
 (e.g. F8 / F9) for other keyboard layouts. Keep all bindings distinct.
 BehindLockDistance=3.0 changes the follow distance.
 Text fields and unrelated modal windows suppress the new hotkeys.
@@ -26,5 +26,7 @@ Healing prerequisites, supplies, range and priority are unchanged.
 
 Behind lock requires single-player/local-host authority. Remote-client and
 dedicated multiplayer support is not established.
-The maintainer accepted 1.0.7 in-game; this ZIP preserves that tested DLL.
+1.0.7 was accepted in-game; 1.0.8 changes the default keys and needs in-game checking.
+Existing cfg values stay active. Missing/invalid keys use Home/End. To migrate,
+edit just those two settings. Copying the bundled cfg resets other preferences.
 To roll back, close the game and restore your backed-up mod folder.

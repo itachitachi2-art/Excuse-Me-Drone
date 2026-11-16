@@ -6,7 +6,7 @@ $dll = Join-Path $here 'ExcuseMeDrone.dll'
 if (-not (Test-Path $dll)) { throw 'Build did not produce ExcuseMeDrone.dll.' }
 $stage = Join-Path ([System.IO.Path]::GetTempPath()) ('ExcuseMeDrone-release-' + [Guid]::NewGuid().ToString('N'))
 $modFolder = Join-Path $stage 'ExcuseMeDrone'
-$zip = Join-Path $here 'ExcuseMeDrone-1.0.7.zip'
+$zip = Join-Path $here 'ExcuseMeDrone-1.0.8.zip'
 try {
     New-Item -ItemType Directory -Path (Join-Path $modFolder 'Config') -Force | Out-Null
     Copy-Item $dll $modFolder
@@ -15,7 +15,7 @@ try {
     Copy-Item (Join-Path $here 'INSTALL.txt') $modFolder
     Copy-Item (Join-Path $here 'README.md') $modFolder
     Copy-Item (Join-Path $here 'NEXUS-CHANGELOG.txt') $modFolder
-    Copy-Item (Join-Path $here 'TEST-1.0.7-JA.txt') $modFolder
+    Copy-Item (Join-Path $here 'TEST-1.0.8-JA.txt') $modFolder
     Compress-Archive -Path $modFolder -DestinationPath $zip -Force
     Write-Host "[ExcuseMeDrone] PACKAGE READY: $zip"
 } finally {

@@ -1,12 +1,14 @@
-# Excuse Me, Drone v1.0.7 — 7 Days to Die v3.4 b10
+# Excuse Me, Drone v1.0.8 — 7 Days to Die v3.4 b10
 
-Adds configurable behind-lock and storage hotkeys. Defaults are JIS `@` (`BehindLockKey=At`) and `:` (`InventoryKey=Colon`), with `BehindLockDistance=3.0`. Edit Config/ExcuseMeDrone.cfg and restart to remap single Unity KeyCode names (e.g. F8 / F9). Keep all bindings distinct. Punctuation includes a key-down-gated character fallback for JIS layouts; physical mapping needs game testing.
+Default keys: **Home** toggles behind-follow lock; **End** toggles the drone inventory; **F10** recalls it. `BehindLockDistance=3.0` is unchanged. Edit Config/ExcuseMeDrone.cfg and restart to remap single Unity KeyCode names. Keep bindings distinct.
+
+Updating the DLL does not rewrite or migrate your config. Existing `At` / `Colon` (or custom) values remain active. Missing or invalid settings use Home / End in 1.0.8. To adopt the new defaults while keeping other settings, change only `BehindLockKey=Home` and `InventoryKey=End`. Replacing the whole cfg with the bundled file also replaces your other preferences. Legacy At/Colon character fallback remains available only when those values are configured; Home/End use direct key detection without character matching. Compact keyboards may require Fn; keypad 7/1 are separate key codes.
 
 Behind-lock follows the owner's horizontal body direction, not camera direction. It is session-only and supported in single-player/local-host authority. It pauses the drone state driver while active. Other entity updates remain active. Blocked geometry leaves the drone at its last position until a clear target becomes available. Toggle off returns to Follow and uses the existing forward summon. F10 also releases the lock. Dead owners, broken/removed drones invalidate it; pending broken-redraw cannot enter lock mode.
 
 Storage uses the native storage activation/lock path and native close/unlock, only for the owned loaded drone within the normal interaction distance. Text entry and unrelated modal windows suppress the new keys. This does not provide remote storage or remote-client fixed-position authority.
 
-The maintainer reported v1.0.7 in-game OK after checking v1.0.6 broken-drone recall, F10 and combat return. This distribution reuses the tested 1.0.7 DLL unchanged. The build uses supplied v3.4 b10 Assembly-CSharp with earlier supplied Unity/Harmony references. Automated checks passed: 65 hotkey/control assertions and 51 regression cases. This general acceptance does not establish every checklist item, TPS, or dedicated/remote multiplayer support. See TEST-1.0.7-JA.txt for targeted checks.
+1.0.7 was accepted in-game by the maintainer, including earlier broken-drone recall/F10/combat-return checks. 1.0.8 changes only default bindings plus version/documentation; it is newly compiled against supplied 3.4 b10 Assembly-CSharp, with earlier Unity/Harmony references. Automated checks are recorded in tests/hotkey-validation.json. 1.0.8 itself has not yet been tested in-game; dedicated/remote multiplayer remains unverified. See TEST-1.0.8-JA.txt.
 
 ## v1.0.7 combat sidestep suppression
 Behind-lock ON suppresses this mod's CombatDodge side teleport, including during temporary combat/heal suspension. Native stun approach and retreat, healing, and post-combat behind return remain unchanged. Turning the lock OFF restores normal configured CombatDodge behavior.

@@ -16,8 +16,8 @@ namespace Itachi.ExcuseMeDrone
         }
 
         internal KeyCode SummonKey = KeyCode.F10;
-        internal KeyCode BehindLockKey = KeyCode.At;
-        internal KeyCode InventoryKey = KeyCode.Colon;
+        internal KeyCode BehindLockKey = KeyCode.Home;
+        internal KeyCode InventoryKey = KeyCode.End;
         internal float BehindLockDistance = 3.0f;
         internal float SummonForwardDistance = 1.50f;
         internal float SummonHeightOffset = 1.20f;

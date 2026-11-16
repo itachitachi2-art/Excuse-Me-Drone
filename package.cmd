@@ -7,6 +7,6 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-echo Package: ExcuseMeDrone-1.0.7.zip. Publication is a separate step.
+echo Package: ExcuseMeDrone-1.0.8.zip. Publication is a separate step.
 pause
 

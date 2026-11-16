@@ -1,3 +1,12 @@
+Version 1.0.8 - Default hotkeys
+
+- Changed default behind-follow key to Home and inventory key to End.
+- F10 recall and all existing drone behavior are unchanged.
+- Existing config values are preserved. Old At/Colon bindings still work when configured.
+- Missing or invalid key settings now fall back to Home/End.
+- To adopt the new defaults, edit only BehindLockKey and InventoryKey in your existing cfg.
+- Built for 3.4 b10. Automated checks passed; 1.0.8 in-game verification is pending.
+
 Version 1.0.7 - 7 Days to Die 3.4
 
 - Added configurable behind-follow locking (default: @) and drone inventory toggle (default: :).

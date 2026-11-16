@@ -1,10 +1,15 @@
 {
-  "version": "1.0.7",
+  "version": "1.0.8",
   "compile": "PASS",
   "game_reference": "3.4 b10",
-  "hotkey_assertions": 65,
+  "hotkey_assertions": 75,
   "regression_cases": 51,
   "game_executed": false,
-  "combat_guard_source_contract": "PASS",
-  "dll_sha256": "5651e1fb35dae0a2fcc4b691b7d26a1b261ca7f863c1f1bed4361b7637b6e765"
+  "defaults": {
+    "BehindLockKey": "Home",
+    "InventoryKey": "End",
+    "SummonKey": "F10"
+  },
+  "existing_config_preserved": true,
+  "dll_sha256": "6e56992d6115741f3e795e62e1a2e847971c65588143cec572c2c55c22e88026"
 }
