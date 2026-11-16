@@ -1,0 +1,14 @@
+{
+  "version": "1.0.7",
+  "assembly_version": "1.0.7.0",
+  "target": "7 Days to Die 3.4 b10",
+  "maintainer_acceptance": "1.0.7 in-game OK; 1.0.6 broken recall/F10/combat return checked",
+  "distribution_dll_identical_to_accepted_test_zip": true,
+  "dll_sha256": "5651e1fb35dae0a2fcc4b691b7d26a1b261ca7f863c1f1bed4361b7637b6e765",
+  "zip_sha256": "9b1ca95485d4ae1f84a71bd7a8178ad5537dc8b0ab4269bf028e033d924a1be7",
+  "hotkey_assertions": 65,
+  "prior_same_dll_regression_cases": 51,
+  "archive_crc": "PASS",
+  "main_merged": false,
+  "release_published": false
+}

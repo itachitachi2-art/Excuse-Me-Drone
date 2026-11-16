@@ -7,6 +7,6 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-echo Candidate package: ExcuseMeDrone-1.0.4.zip. In-game validation required before publication.
+echo Package: ExcuseMeDrone-1.0.7.zip. Publication is a separate step.
 pause
 

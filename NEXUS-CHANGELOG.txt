@@ -1,3 +1,21 @@
+Version 1.0.7 - 7 Days to Die 3.4
+
+- Added configurable behind-follow locking (default: @) and drone inventory toggle (default: :).
+- Behind-follow defaults to 3 metres and tracks the owner's body direction.
+- Toggle off or use F10 to cancel the lock and recall the drone.
+- Stun-baton combat temporarily releases the position lock so native combat movement can run.
+- Automatically return behind after combat, with a short delay and without interrupting an active heal.
+- Suppress the mod's combat sidestep teleport while behind-follow is enabled, including during combat suspension.
+- Preserve native stun approach/retreat, healing conditions, normal-mode combat dodge and existing broken-drone recall.
+- Inventory access retains the native ownership, interaction-distance and locking rules.
+- Rebind the new hotkeys and adjust behind distance in Config/ExcuseMeDrone.cfg.
+- Updated for 3.4 b10. Behind-follow requires single-player/local-host authority.
+
+Maintainer accepted 1.0.7 in-game. The distribution uses the same tested DLL.
+Dedicated/remote multiplayer remains unverified. This is a prepared package, not a published release.
+
+Historical notes:
+
 Excuse Me, Drone 1.0.4 - release notes prepared; not published
 
 Add a drone-only guard to EntityAlive.SetRevengeTarget(EntityAlive).
@@ -19,3 +37,4 @@ At the time of the 1.0.3 candidate, individual in-game results were not recorded
 
 Restore ground-placement redraw when local floor/clearance search fails.
 Never mark the broken-drone ground step complete without executing its teleport.
+

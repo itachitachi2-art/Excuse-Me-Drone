@@ -1,3 +1,9 @@
+# 1.0.7 acceptance
+
+Maintainer reported in-game OK after 1.0.6 broken recall/F10/combat-return checks.
+65 hotkey assertions and 51 regressions passed. Distribution reuses the tested DLL.
+This is not proof of every historical checklist item or multiplayer support.
+
 # Excuse Me, Drone v1.0.4 test checklist
 
 ## Acceptance update (2026-10-17)
@@ -86,3 +92,4 @@ Useful logs:
 - Broken recall must preserve wake -> ground teleport -> Vanilla lift -> restored shutdown.
 - Test blocked/failed floor search: ground teleport must still execute before its applied flag is set.
 - Keep GroundSnapEnabled=true when validating this ground redraw path.
+

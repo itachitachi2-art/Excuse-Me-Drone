@@ -1,4 +1,4 @@
-# Excuse Me, Drone v1.0.7 test candidate — 7 Days to Die v3.4 b10
+# Excuse Me, Drone v1.0.7 — 7 Days to Die v3.4 b10
 
 Adds configurable behind-lock and storage hotkeys. Defaults are JIS `@` (`BehindLockKey=At`) and `:` (`InventoryKey=Colon`), with `BehindLockDistance=3.0`. Edit Config/ExcuseMeDrone.cfg and restart to remap single Unity KeyCode names (e.g. F8 / F9). Keep all bindings distinct. Punctuation includes a key-down-gated character fallback for JIS layouts; physical mapping needs game testing.
 
@@ -6,7 +6,7 @@ Behind-lock follows the owner's horizontal body direction, not camera direction.
 
 Storage uses the native storage activation/lock path and native close/unlock, only for the owned loaded drone within the normal interaction distance. Text entry and unrelated modal windows suppress the new keys. This does not provide remote storage or remote-client fixed-position authority.
 
-See TEST-1.0.7-JA.txt for game checks. The new build uses the supplied v3.4 b10 Assembly-CSharp; Unity and Harmony supporting references are reused from earlier supplied references. No game execution or multiplayer/TPS validation is claimed.
+The maintainer reported v1.0.7 in-game OK after checking v1.0.6 broken-drone recall, F10 and combat return. This distribution reuses the tested 1.0.7 DLL unchanged. The build uses supplied v3.4 b10 Assembly-CSharp with earlier supplied Unity/Harmony references. Automated checks passed: 65 hotkey/control assertions and 51 regression cases. This general acceptance does not establish every checklist item, TPS, or dedicated/remote multiplayer support. See TEST-1.0.7-JA.txt for targeted checks.
 
 ## v1.0.7 combat sidestep suppression
 Behind-lock ON suppresses this mod's CombatDodge side teleport, including during temporary combat/heal suspension. Native stun approach and retreat, healing, and post-combat behind return remain unchanged. Turning the lock OFF restores normal configured CombatDodge behavior.

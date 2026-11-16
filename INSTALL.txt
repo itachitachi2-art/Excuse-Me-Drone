@@ -1,3 +1,30 @@
-Excuse Me, Drone 1.0.7 test candidate for 3.4 b10.
-Close game, replace old mod folder (avoid duplicate DLLs), read TEST-1.0.7-JA.txt.
-EAC must be disabled for this DLL mod.
+Excuse Me, Drone 1.0.7 - 7 Days to Die 3.4 b10
+
+1. Close the game and back up the old mod folder and customized config.
+2. Replace the existing Mods/ExcuseMeDrone folder with ExcuseMeDrone from this ZIP.
+   Do not install two copies of the DLL/mod.
+3. Restore your preferred Config/ExcuseMeDrone.cfg settings.
+   Missing new keys use their defaults. Restart after config changes.
+4. Keep the bundled 0_TFP_Harmony installed and disable EAC.
+
+F10: existing drone summon. Also cancels behind lock.
+@: toggle behind lock, 3 m behind the owner's body direction by default.
+   Toggle OFF returns to Follow and summons in front.
+:: toggle the owned drone's inventory within normal interaction range.
+
+Remap BehindLockKey=At and InventoryKey=Colon to single Unity KeyCode names
+(e.g. F8 / F9) for other keyboard layouts. Keep all bindings distinct.
+BehindLockDistance=3.0 changes the follow distance.
+Text fields and unrelated modal windows suppress the new hotkeys.
+
+With a stun baton installed, native stun combat temporarily releases position
+lock. After combat, wait at least two seconds and finish any active heal before
+returning behind. Manual OFF/F10 cancels that automatic return.
+CombatDodge side teleport is suppressed while behind lock is ON, even during
+combat suspension. Native approach/retreat, healing and stuck rescue remain.
+Healing prerequisites, supplies, range and priority are unchanged.
+
+Behind lock requires single-player/local-host authority. Remote-client and
+dedicated multiplayer support is not established.
+The maintainer accepted 1.0.7 in-game; this ZIP preserves that tested DLL.
+To roll back, close the game and restore your backed-up mod folder.

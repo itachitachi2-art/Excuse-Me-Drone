@@ -13,9 +13,11 @@ try {
     Copy-Item (Join-Path $here 'ModInfo.xml') $modFolder
     Copy-Item (Join-Path $here 'Config\ExcuseMeDrone.cfg') (Join-Path $modFolder 'Config')
     Copy-Item (Join-Path $here 'INSTALL.txt') $modFolder
+    Copy-Item (Join-Path $here 'README.md') $modFolder
+    Copy-Item (Join-Path $here 'NEXUS-CHANGELOG.txt') $modFolder
     Copy-Item (Join-Path $here 'TEST-1.0.7-JA.txt') $modFolder
     Compress-Archive -Path $modFolder -DestinationPath $zip -Force
-    Write-Host "[ExcuseMeDrone] CANDIDATE PACKAGE READY: $zip"
+    Write-Host "[ExcuseMeDrone] PACKAGE READY: $zip"
 } finally {
     if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 }
