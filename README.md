@@ -8,7 +8,7 @@ Behind-lock follows the owner's horizontal body direction, not camera direction.
 
 Storage uses the native storage activation/lock path and native close/unlock, only for the owned loaded drone within the normal interaction distance. Text entry and unrelated modal windows suppress the new keys. This does not provide remote storage or remote-client fixed-position authority.
 
-1.0.7 was accepted in-game by the maintainer, including earlier broken-drone recall/F10/combat-return checks. 1.0.8 changes only default bindings plus version/documentation; it is newly compiled against supplied 3.4 b10 Assembly-CSharp, with earlier Unity/Harmony references. Automated checks are recorded in tests/hotkey-validation.json. 1.0.8 itself has not yet been tested in-game; dedicated/remote multiplayer remains unverified. See TEST-1.0.8-JA.txt.
+1.0.7 was accepted in-game by the maintainer, including earlier broken-drone recall/F10/combat-return checks. 1.0.8 changes only default bindings plus version/documentation; it is newly compiled against supplied 3.4 b10 Assembly-CSharp, with earlier Unity/Harmony references. Automated checks are recorded in tests/hotkey-validation.json. The maintainer confirmed Home/End and explicitly configured At/Colon both work in-game in 1.0.8. Other 1.0.8 scenarios were not individually reported; dedicated/remote multiplayer remains unverified. See TEST-1.0.8-JA.txt.
 
 ## v1.0.7 combat sidestep suppression
 Behind-lock ON suppresses this mod's CombatDodge side teleport, including during temporary combat/heal suspension. Native stun approach and retreat, healing, and post-combat behind return remain unchanged. Turning the lock OFF restores normal configured CombatDodge behavior.

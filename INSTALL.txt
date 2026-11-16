@@ -26,7 +26,8 @@ Healing prerequisites, supplies, range and priority are unchanged.
 
 Behind lock requires single-player/local-host authority. Remote-client and
 dedicated multiplayer support is not established.
-1.0.7 was accepted in-game; 1.0.8 changes the default keys and needs in-game checking.
+1.0.8 Home/End and explicitly configured At/Colon were confirmed in-game by the maintainer.
+Other scenarios were not individually reported for 1.0.8.
 Existing cfg values stay active. Missing/invalid keys use Home/End. To migrate,
 edit just those two settings. Copying the bundled cfg resets other preferences.
 To roll back, close the game and restore your backed-up mod folder.

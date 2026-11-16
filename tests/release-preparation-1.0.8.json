@@ -4,9 +4,9 @@
   "file_version": "1.0.8.0",
   "target": "3.4 b10",
   "release_package": "ExcuseMeDrone-1.0.8.zip",
-  "reuses_existing_1_0_8_archive_unchanged": true,
+  "reuses_existing_1_0_8_archive_unchanged": false,
   "dll_sha256": "6e56992d6115741f3e795e62e1a2e847971c65588143cec572c2c55c22e88026",
-  "zip_sha256": "797f8c2af874d3cb7d5e20b6084a6ad4f12ad7612fd4c81ae2dabe73fd7189e5",
+  "zip_sha256": "dc7c3a4dc76081ba216b49dd0aaddd90910b8d852432338b999c49813397dbdf",
   "archive_crc": "PASS",
   "packaged_config": "Home/End/F10",
   "packaged_docs_match_worktree": true,
@@ -16,7 +16,12 @@
   },
   "current_request_game_test_not_performed": true,
   "user_approved_packaging": true,
-  "detailed_1_0_8_in_game_test_results_not_supplied": true,
   "main_merged": false,
-  "release_published": false
+  "release_published": false,
+  "dll_unchanged_from_prior_1_0_8": true,
+  "maintainer_confirmed_in_game_1_0_8": [
+    "Home/End",
+    "explicitly configured At/Colon"
+  ],
+  "other_1_0_8_scenarios_not_individually_reported": true
 }

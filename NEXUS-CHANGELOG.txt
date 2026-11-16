@@ -5,7 +5,7 @@ Version 1.0.8 - Default hotkeys
 - Existing config values are preserved. Old At/Colon bindings still work when configured.
 - Missing or invalid key settings now fall back to Home/End.
 - To adopt the new defaults, edit only BehindLockKey and InventoryKey in your existing cfg.
-- Built for 3.4 b10. Automated checks passed; 1.0.8 in-game verification is pending.
+- Built for 3.4 b10. Automated checks passed; the maintainer verified Home/End and configured At/Colon in-game in 1.0.8.
 
 Version 1.0.7 - 7 Days to Die 3.4
 
