@@ -37,6 +37,7 @@ namespace Itachi.ExcuseMeDrone
         internal static void Reset()
         {
             States.Clear();
+            ExcuseMeDroneHotkeys.Reset();
             localDrone = null;
             lastSummonFrame = -1;
             loggedFirstLocalDroneTick = false;
@@ -56,6 +57,7 @@ namespace Itachi.ExcuseMeDrone
             }
 
             localDrone = drone;
+            if (ExcuseMeDroneHotkeys.IsLocked(drone)) return;
             RuntimeState state = GetState(drone);
             ExcuseMeDroneConfig cfg = ExcuseMeDroneConfig.Current;
 
@@ -105,6 +107,8 @@ namespace Itachi.ExcuseMeDrone
             if (drone == null) return;
             if (!(drone.Owner is EntityPlayerLocal)) return;
 
+            ExcuseMeDroneHotkeys.UpdateLocked(drone);
+
             if (ExcuseMeDroneConfig.Current.Invisible)
                 drone.SetRenderersEnabled(false);
         }
@@ -113,6 +117,7 @@ namespace Itachi.ExcuseMeDrone
         {
             if (ui == null || ui.entityPlayer == null) return;
 
+            ExcuseMeDroneHotkeys.Handle(ui);
             ExcuseMeDroneConfig cfg = ExcuseMeDroneConfig.Current;
             if (!loggedFirstUiTick)
             {
@@ -250,8 +255,15 @@ namespace Itachi.ExcuseMeDrone
             DebugLog("Recalled saved drone " + restored.entityId + " near its owner.");
         }
 
-        private static void SummonDrone(EntityDrone drone, EntityPlayerLocal player, ExcuseMeDroneConfig cfg)
+        internal static bool CanLock(EntityDrone drone)
         {
+            RuntimeState state = GetState(drone);
+            return !IsShutdownOrBroken(drone) && !state.PendingBrokenRevive && !state.PendingBrokenReshutdown;
+        }
+
+        internal static void SummonDrone(EntityDrone drone, EntityPlayerLocal player, ExcuseMeDroneConfig cfg)
+        {
+            ExcuseMeDroneHotkeys.ReleaseWithoutSummon(drone);
             float distance = Vector3.Distance(drone.position, player.position);
             RuntimeState runtimeState = GetState(drone);
             bool wasBroken = IsShutdownOrBroken(drone);
@@ -684,7 +696,7 @@ namespace Itachi.ExcuseMeDrone
             return TryPlacement(owner, atOwner, drone, cfg, ground, true, out target);
         }
 
-        private static bool TryPlacement(EntityPlayerLocal owner, Vector3 desired, EntityDrone drone,
+        internal static bool TryPlacement(EntityPlayerLocal owner, Vector3 desired, EntityDrone drone,
             ExcuseMeDroneConfig cfg, bool ground, bool allowOwnerOverlap, out Vector3 target)
         {
             target = desired;
@@ -738,7 +750,7 @@ namespace Itachi.ExcuseMeDrone
             return true;
         }
 
-        private static bool IsEntityCollider(Collider collider, Entity entity)
+        internal static bool IsEntityCollider(Collider collider, Entity entity)
         {
             return entity != null && entity.transform != null &&
                 (collider.transform == entity.transform || collider.transform.IsChildOf(entity.transform));
@@ -797,3 +809,4 @@ namespace Itachi.ExcuseMeDrone
         }
     }
 }
+

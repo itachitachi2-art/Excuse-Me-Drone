@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Supplementary cloud/Mono validation; Windows build.cmd remains unchanged.
 
-Compile every production source against user-provided v3.3 references, run the
+Compile every production source against user-provided v3.4 references, run the
 exact new prefix with real Harmony on controlled doubles, then run the unchanged
 25-case placement harness with extracted production methods. No game is launched.
 """
@@ -62,13 +62,13 @@ def main():
     manifest['reference_list_matches_windows_build'] = True
     manifest['nostdlib_and_command_line_noconfig'] = True
     dll = out / 'ExcuseMeDrone.dll'
-    rsp = out / 'actual-v33.rsp'
+    rsp = out / 'actual-v34.rsp'
     rsp.write_text('\n'.join(['/nologo', '/nostdlib+', '/target:library', '/optimize+', '/debug-', '/langversion:5',
                               '/out:"' + str(dll) + '"'] + ['/reference:"' + str(x) + '"' for x in refs] +
                              ['"' + str(x) + '"' for x in sources]) + '\n')
     if dll.exists():
         dll.unlink()
-    run('actual-v33-build', [a.mcs, '/noconfig', '@' + str(rsp)])
+    run('actual-v34-build', [a.mcs, '/noconfig', '@' + str(rsp)])
     assert dll.is_file()
     manifest['dll_sha256'] = digest(dll)
     revenge = out / 'revenge-tests.exe'
@@ -111,3 +111,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

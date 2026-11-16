@@ -1,3 +1,15 @@
+# Excuse Me, Drone v1.0.5 test candidate — 7 Days to Die v3.4 b10
+
+Adds configurable behind-lock and storage hotkeys. Defaults are JIS `@` (`BehindLockKey=At`) and `:` (`InventoryKey=Colon`), with `BehindLockDistance=3.0`. Edit Config/ExcuseMeDrone.cfg and restart to remap single Unity KeyCode names (e.g. F8 / F9). Keep all bindings distinct. Punctuation includes a key-down-gated character fallback for JIS layouts; physical mapping needs game testing.
+
+Behind-lock follows the owner's horizontal body direction, not camera direction. It is session-only and supported in single-player/local-host authority. It pauses the drone state driver while active. Other entity updates remain active. Blocked geometry leaves the drone at its last position until a clear target becomes available. Toggle off returns to Follow and uses the existing forward summon. F10 also releases the lock. Dead owners, broken/removed drones invalidate it; pending broken-redraw cannot enter lock mode.
+
+Storage uses the native storage activation/lock path and native close/unlock, only for the owned loaded drone within the normal interaction distance. Text entry and unrelated modal windows suppress the new keys. This does not provide remote storage or remote-client fixed-position authority.
+
+See TEST-1.0.5-JA.txt for game checks. The new build uses the supplied v3.4 b10 Assembly-CSharp; Unity and Harmony supporting references are reused from earlier supplied references. No game execution or multiplayer/TPS validation is claimed.
+
+## Prior v1.0.4 documentation (historical)
+
 # Excuse Me, Drone v1.0.4 candidate — 7 Days to Die v3.3
 
 A small quality-of-life mod for the robotic drone.
@@ -84,3 +96,4 @@ python tests/run-placement-tests.py /path/to/dotnet /path/to/csc.dll
 ```
 
 See `TEST_CHECKLIST.md` for game checks. This branch is a candidate, not a published Nexus release.
+

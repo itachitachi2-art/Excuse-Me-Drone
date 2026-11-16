@@ -12,7 +12,7 @@ names = ['FindManualSummonTarget', 'TryFindTeleportTarget', 'TryPlacement',
          'FindGroundRedrawTarget', 'UpdatePendingBrokenReshutdown']
 def extract(name):
     import re
-    start = re.search(r'        private static \w+ '+name+r'\(', source).start()
+    start = re.search(r'        (?:private|internal) static \w+ '+name+r'\(', source).start()
     brace = source.index('{', start)
     depth, end = 1, brace + 1
     while depth:
@@ -29,3 +29,4 @@ with tempfile.TemporaryDirectory() as scratch:
     subprocess.run([str(dotnet), str(csc), '/noconfig', '/nostdlib+', '/nologo', '/warn:0', '/target:exe', '/out:'+str(out/'tests.dll')]+['/reference:'+str(p) for p in framework.glob('*.dll')]+[str(out/'tests.cs')], check=True, env=dict(os.environ,DOTNET_ROLL_FORWARD='Major'))
     (out/'tests.runtimeconfig.json').write_text(json.dumps({'runtimeOptions':{'tfm':'net8.0','framework':{'name':'Microsoft.NETCore.App','version':framework.name}}}))
     subprocess.run([str(dotnet), str(out/'tests.dll')], check=True)
+

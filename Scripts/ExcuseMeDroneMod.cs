@@ -8,14 +8,14 @@ namespace Itachi.ExcuseMeDrone
     {
         public void InitMod(Mod mod)
         {
-            Debug.Log("[ExcuseMeDrone] InitMod ENTER v1.0.4. Path=" + (mod != null ? mod.Path : "<null>"));
+            Debug.Log("[ExcuseMeDrone] InitMod ENTER v1.0.5. Path=" + (mod != null ? mod.Path : "<null>"));
             try
             {
                 ExcuseMeDroneConfig.Load(mod.Path);
                 ExcuseMeDroneController.Reset();
                 var harmony = new Harmony("itachi.excusemedrone");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
-                Debug.Log("[ExcuseMeDrone] Harmony PatchAll OK. v1.0.4 loaded.");
+                Debug.Log("[ExcuseMeDrone] Harmony PatchAll OK. v1.0.5 loaded.");
             }
             catch (System.Exception ex)
             {
@@ -25,3 +25,4 @@ namespace Itachi.ExcuseMeDrone
         }
     }
 }
+

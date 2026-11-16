@@ -16,6 +16,9 @@ namespace Itachi.ExcuseMeDrone
         }
 
         internal KeyCode SummonKey = KeyCode.F10;
+        internal KeyCode BehindLockKey = KeyCode.At;
+        internal KeyCode InventoryKey = KeyCode.Colon;
+        internal float BehindLockDistance = 3.0f;
         internal float SummonForwardDistance = 1.50f;
         internal float SummonHeightOffset = 1.20f;
         internal bool GroundSnapEnabled = true;
@@ -68,6 +71,9 @@ namespace Itachi.ExcuseMeDrone
 
                 // New names first; old v0.1.12 Menu* names are accepted for config compatibility.
                 config.SummonKey = ParseKey(values, "SummonKey", ParseKey(values, "MenuKey", config.SummonKey));
+                config.BehindLockKey = ParseKey(values, "BehindLockKey", config.BehindLockKey);
+                config.InventoryKey = ParseKey(values, "InventoryKey", config.InventoryKey);
+                config.BehindLockDistance = ParseFloat(values, "BehindLockDistance", config.BehindLockDistance, 0.6f, 6f);
                 config.SummonForwardDistance = ParseFloat(values, "SummonForwardDistance",
                     ParseFloat(values, "MenuTeleportForwardDistance", config.SummonForwardDistance, 0.5f, 5f), 0.5f, 5f);
                 config.SummonHeightOffset = ParseFloat(values, "SummonHeightOffset",
@@ -134,3 +140,4 @@ namespace Itachi.ExcuseMeDrone
         }
     }
 }
+
