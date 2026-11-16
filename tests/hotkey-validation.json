@@ -1,13 +1,9 @@
 {
-  "version": "1.0.5",
+  "version": "1.0.6",
   "game_reference": "3.4 b10 supplied Assembly-CSharp",
-  "supporting_references": "previously supplied Unity/Harmony",
   "compile": "PASS",
-  "hotkey_controlled_assertions": 44,
-  "placement_controlled_cases": 25,
-  "revenge_direct_cases": 21,
-  "revenge_harmony_double_cases": 5,
-  "in_game_executed": false,
-  "tps_input_physics_multiplayer_verified": false,
-  "dll_sha256": "58d9100f76021962328cc0e1aca34a17e209bd8c31d5ed6c01870f3ada334bea"
+  "hotkey_assertions": 65,
+  "regression_cases": 51,
+  "game_executed": false,
+  "dll_sha256": "46dbab6415e24dbc3577b3e81c7f1213d2a35cdd1362181061a655f22263897e"
 }

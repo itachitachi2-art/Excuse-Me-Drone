@@ -6,7 +6,16 @@ Does not execute full Controller, game UI, native physics, multiplayer or Harmon
 from pathlib import Path
 import subprocess, sys
 root = Path(__file__).resolve().parents[1]
-out = root / 'tests/hotkey-output'
+# Static contract only: the full Controller is not executed by the harness.
+controller = (root/'Scripts/ExcuseMeDroneController.cs').read_text()
+import re
+body = re.search(r'internal static bool CanLock\(EntityDrone drone\)\s*\{(.*?)\n        \}', controller, re.S).group(1)
+assert '!IsShutdownOrBroken(drone)' in body
+assert '!state.PendingBrokenRevive' in body
+assert '!state.PendingBrokenReshutdown' in body
+assert 'ExcuseMeDroneHotkeys.ReleaseWithoutSummon(drone);' in controller
+print('PASS static CanLock broken/pending-revive/pending-reshutdown guard and summon-release contract (not runtime coverage)')
+out = root / 'tests/hotkey-output' 
 out.mkdir(exist_ok=True)
 exe = out / 'hotkey-tests.exe'
 cmd = [sys.argv[1], '-langversion:5', '-out:' + str(exe),

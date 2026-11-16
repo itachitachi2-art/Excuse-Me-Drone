@@ -8,19 +8,49 @@ namespace Itachi.ExcuseMeDrone
     {
         private static EntityDrone locked;
         private static int lastFrame = -1;
-        internal static void Reset() { locked = null; lastFrame = -1; }
-        internal static bool IsLocked(EntityDrone drone)
+        private static bool combatSuspended;
+        private static float lastCombatTime;
+        internal const float CombatReturnDelay = 2f;
+        internal static void Reset() { locked = null; combatSuspended = false; lastCombatTime = 0f; lastFrame = -1; }
+        internal static bool IsLockRequested(EntityDrone drone)
         {
             if (locked != drone || drone == null) return false;
             EntityPlayerLocal owner = drone.Owner as EntityPlayerLocal;
-            if (owner == null || owner.IsDead() || drone.Health <= 1 ||
+            if (owner == null || owner.IsDead() || drone.Health <= 1 || (int)drone.GetState() == 5 ||
                 GameManager.Instance == null || GameManager.Instance.World == null ||
                 GameManager.Instance.World.GetEntity(drone.entityId) != drone)
-            { locked = null; return false; }
+            { locked = null; combatSuspended = false; return false; }
             return true;
         }
+        // Only native stun combat suspends positioning. A heal target is also stored in
+        // GetAttackTarget(), so that API must never be treated as proof of an enemy.
+        internal static bool IsLocked(EntityDrone drone)
+        {
+            if (!IsLockRequested(drone)) return false;
+            bool baton = false;
+            var weapons = drone.GetInstalledWeapons();
+            if (weapons != null)
+                foreach (var weapon in weapons)
+                    if (weapon is DroneWeapons.StunBeamWeapon) { baton = true; break; }
+            bool attacking = baton && drone.activeWeapon is DroneWeapons.StunBeamWeapon &&
+                ((int)drone.GetState() == 4 || (int)drone.transitionState == 4);
+            if (attacking)
+            {
+                combatSuspended = true;
+                lastCombatTime = Time.time;
+                return false;
+            }
+            if (!combatSuspended) return true;
+            // Finish the native retreat and any immediately following heal before
+            // snapping back. This also bridges gaps between consecutive stun tasks.
+            if ((int)drone.GetState() == 3 || (int)drone.transitionState == 3 ||
+                Time.time - lastCombatTime < CombatReturnDelay) return false;
+            combatSuspended = false;
+            return true;
+        }
+
         internal static void ReleaseWithoutSummon(EntityDrone drone)
-        { if (locked == drone) locked = null; }
+        { if (locked == drone) { locked = null; combatSuspended = false; } }
 
         private static bool Pressed(KeyCode key)
         {
@@ -78,15 +108,16 @@ namespace Itachi.ExcuseMeDrone
             // Continuous positioning must be authoritative, not a client-only visual trick.
             if (ConnectionManager.Instance == null || !ConnectionManager.Instance.IsServer)
             { Debug.LogWarning("[ExcuseMeDrone] Behind lock currently requires single-player/local host."); return; }
-            if (IsLocked(drone))
+            if (IsLockRequested(drone))
             {
-                locked = null;
+                ReleaseWithoutSummon(drone);
                 drone.FollowMode();
                 ExcuseMeDroneController.SummonDrone(drone, ui.entityPlayer, cfg);
             }
             else if (ExcuseMeDroneController.CanLock(drone))
             {
                 locked = drone;
+                combatSuspended = false;
                 Debug.Log("[ExcuseMeDrone] Behind lock enabled.");
                 UpdateLocked(drone);
             }

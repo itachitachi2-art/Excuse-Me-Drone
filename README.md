@@ -1,4 +1,4 @@
-# Excuse Me, Drone v1.0.5 test candidate — 7 Days to Die v3.4 b10
+# Excuse Me, Drone v1.0.6 test candidate — 7 Days to Die v3.4 b10
 
 Adds configurable behind-lock and storage hotkeys. Defaults are JIS `@` (`BehindLockKey=At`) and `:` (`InventoryKey=Colon`), with `BehindLockDistance=3.0`. Edit Config/ExcuseMeDrone.cfg and restart to remap single Unity KeyCode names (e.g. F8 / F9). Keep all bindings distinct. Punctuation includes a key-down-gated character fallback for JIS layouts; physical mapping needs game testing.
 
@@ -6,7 +6,12 @@ Behind-lock follows the owner's horizontal body direction, not camera direction.
 
 Storage uses the native storage activation/lock path and native close/unlock, only for the owned loaded drone within the normal interaction distance. Text entry and unrelated modal windows suppress the new keys. This does not provide remote storage or remote-client fixed-position authority.
 
-See TEST-1.0.5-JA.txt for game checks. The new build uses the supplied v3.4 b10 Assembly-CSharp; Unity and Harmony supporting references are reused from earlier supplied references. No game execution or multiplayer/TPS validation is claimed.
+See TEST-1.0.6-JA.txt for game checks. The new build uses the supplied v3.4 b10 Assembly-CSharp; Unity and Harmony supporting references are reused from earlier supplied references. No game execution or multiplayer/TPS validation is claimed.
+
+## v1.0.6 combat suspension
+With the stun baton installed, a native stun Attack temporarily releases behind positioning and the state-driver suppression. The toggle stays ON. After the last native Attack, wait at least two seconds and finish any active/pending Heal before resuming behind positioning. This is based on the drone's actual AI task, not merely nearby enemies or the player's combat flag. Repeated attacks extend the wait. Manual toggle OFF or F10 cancels the pending return. Removing the baton while suspended also honors the short delay and an ongoing heal; without a baton no new combat suspension begins.
+
+The mod does not change healing priority, thresholds, supplies, cooldown or weapon range. Healing and attack tasks were never globally disabled by fixed mode; the old Japanese test note claiming this was incorrect. Fixed positioning can interfere with movement needed by those tasks. Baton-free fixed mode is deliberately unchanged by this update.
 
 ## Prior v1.0.4 documentation (historical)
 

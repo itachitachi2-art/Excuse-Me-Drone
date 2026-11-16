@@ -9,3 +9,4 @@ if errorlevel 1 (
 )
 echo Candidate package: ExcuseMeDrone-1.0.4.zip. In-game validation required before publication.
 pause
+

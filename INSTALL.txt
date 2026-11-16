@@ -1,3 +1,3 @@
-Excuse Me, Drone 1.0.5 test candidate for 3.4 b10.
-Close game, replace old mod folder (avoid duplicate DLLs), read TEST-1.0.5-JA.txt.
+Excuse Me, Drone 1.0.6 test candidate for 3.4 b10.
+Close game, replace old mod folder (avoid duplicate DLLs), read TEST-1.0.6-JA.txt.
 EAC must be disabled for this DLL mod.
